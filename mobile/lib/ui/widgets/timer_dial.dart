@@ -30,6 +30,19 @@ class TimerDial extends StatelessWidget {
   /// The ring and text color.
   final Color color;
 
+  /// The dial's width and height on phones, in logical pixels.
+  static const phoneSize = 260.0;
+
+  /// The dial's width and height on tablets, in logical pixels.
+  static const tabletSize = 400.0;
+
+  /// Screens whose shortest side is at least this wide (every iPad) get the tablet size.
+  static const tabletBreakpoint = 600.0;
+
+  /// The dial size for a screen of [screen] logical pixels.
+  static double sizeFor(Size screen) =>
+      screen.shortestSide >= tabletBreakpoint ? tabletSize : phoneSize;
+
   /// The phase name shown above the countdown.
   static String phaseLabel(TimerState state) => switch (state.status) {
     TimerStatus.idle => 'Ready',
@@ -48,19 +61,24 @@ class TimerDial extends StatelessWidget {
     final progress = state.status == TimerStatus.idle ? 0.0 : state.progressAt(now);
     final cycleNumber = state.completedCycles + (state.phase == Phase.focus ? 1 : 0);
     final label = phaseLabel(state);
+    final size = sizeFor(MediaQuery.sizeOf(context));
+    // The ring, stroke and text all grow by the same factor on tablets.
+    final scale = size / phoneSize;
+    TextStyle? scaled(TextStyle? style) =>
+        style?.copyWith(fontSize: style.fontSize == null ? null : style.fontSize! * scale);
 
     return Semantics(
       label: '$label. ${spokenCountdown(remaining)}.',
       liveRegion: false,
       excludeSemantics: true,
       child: SizedBox.square(
-        dimension: 260,
+        dimension: size,
         child: Stack(
           fit: StackFit.expand,
           children: [
             CircularProgressIndicator(
               value: progress,
-              strokeWidth: 12,
+              strokeWidth: 12 * scale,
               strokeCap: StrokeCap.round,
               color: color,
               backgroundColor: color.withValues(alpha: 0.15),
@@ -69,11 +87,11 @@ class TimerDial extends StatelessWidget {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Text(label, style: theme.textTheme.titleMedium?.copyWith(color: color)),
+                  Text(label, style: scaled(theme.textTheme.titleMedium)?.copyWith(color: color)),
                   FittedBox(
                     child: Text(
                       formatCountdown(remaining),
-                      style: theme.textTheme.displayLarge?.copyWith(
+                      style: scaled(theme.textTheme.displayLarge)?.copyWith(
                         color: color,
                         fontWeight: FontWeight.w600,
                         fontFeatures: const [FontFeature.tabularFigures()],
@@ -85,7 +103,7 @@ class TimerDial extends StatelessWidget {
                       state.status == TimerStatus.waiting
                           ? '${state.completedCycles} done'
                           : 'Cycle $cycleNumber',
-                      style: theme.textTheme.bodyMedium,
+                      style: scaled(theme.textTheme.bodyMedium),
                     ),
                 ],
               ),

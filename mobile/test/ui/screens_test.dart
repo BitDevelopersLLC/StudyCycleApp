@@ -5,6 +5,7 @@ import 'package:study_cycle/domain/cycle_plan.dart';
 import 'package:study_cycle/domain/timer_state.dart';
 import 'package:study_cycle/platform/phase_notifier.dart';
 import 'package:study_cycle/ui/widgets/readable_width.dart';
+import 'package:study_cycle/ui/widgets/timer_dial.dart';
 
 import '../fakes.dart';
 
@@ -165,5 +166,19 @@ void main() {
       find.descendant(of: find.byType(ReadableWidth), matching: find.byType(ConstrainedBox)).first,
     );
     expect(column.width, ReadableWidth.defaultMaxWidth);
+    // The dial is bigger on a tablet.
+    expect(tester.getSize(find.byType(TimerDial)).width, TimerDial.tabletSize);
+  });
+
+  testWidgets('on a phone the dial keeps the phone size', (tester) async {
+    // iPhone 17 Pro Max: 440 x 956 logical pixels.
+    tester.view.physicalSize = const Size(1320, 2868);
+    tester.view.devicePixelRatio = 3;
+    addTearDown(tester.view.reset);
+    final h = Harness();
+    await h.controller.load();
+    await tester.pumpWidget(StudyCycleApp(controller: h.controller));
+
+    expect(tester.getSize(find.byType(TimerDial)).width, TimerDial.phoneSize);
   });
 }
