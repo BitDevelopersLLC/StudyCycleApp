@@ -22,4 +22,5 @@ kept in the git history under the tag `xamarin-template-2023`.
 - About screen with the research behind the cycle lengths and its limits, and the privacy promise.
 - Light and dark mode; screen reader labels.
 - iPad and tablet layout: every screen is a centered column instead of stretching edge to edge.
+- The Study Cycle owl logo as the app icon (with an Android themed icon) and as the notification icon.
 - No data collection; no internet permission on Android.

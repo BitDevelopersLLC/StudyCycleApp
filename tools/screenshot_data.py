@@ -26,7 +26,8 @@ from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
 from xml.sax.saxutils import quoteattr, escape
 
-APP_ID = "app.studycycle"
+APP_ID = "app.studycycle"  # Android package
+IOS_ID = "com.bitdevelopers.studycycle"  # iOS bundle ID
 FOCUS_MIN = 90
 BREAK_MIN = 20
 
@@ -124,9 +125,9 @@ def ios(scene: str) -> None:
     def simctl(*a: str) -> str:
         return subprocess.run(["xcrun", "simctl", *a], check=True, capture_output=True, text=True).stdout
 
-    subprocess.run(["xcrun", "simctl", "terminate", "booted", APP_ID], check=False, capture_output=True)
-    container = Path(simctl("get_app_container", "booted", APP_ID, "data").strip())
-    plist = container / "Library" / "Preferences" / f"{APP_ID}.plist"
+    subprocess.run(["xcrun", "simctl", "terminate", "booted", IOS_ID], check=False, capture_output=True)
+    container = Path(simctl("get_app_container", "booted", IOS_ID, "data").strip())
+    plist = container / "Library" / "Preferences" / f"{IOS_ID}.plist"
     current: dict[str, object] = {}
     if plist.exists():
         current = plistlib.loads(plist.read_bytes())

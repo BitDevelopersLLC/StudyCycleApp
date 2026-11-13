@@ -85,7 +85,7 @@ class LocalPhaseNotifier implements PhaseNotifier {
   Future<void> initialize() async {
     await _plugin.initialize(
       settings: const InitializationSettings(
-        android: AndroidInitializationSettings('@mipmap/ic_launcher'),
+        android: AndroidInitializationSettings('@drawable/ic_notification'),
         // Permission is asked for when the user first starts a timer, not at launch.
         iOS: DarwinInitializationSettings(
           requestAlertPermission: false,

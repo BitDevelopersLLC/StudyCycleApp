@@ -2,6 +2,7 @@
 """Make every store and website image for Study Cycle from the raw screenshots and the icon.
 
 Usage:
+    python tools/store_graphics.py icons     app icon sources + Android notification icon, from the logo
     python tools/store_graphics.py android   Google Play: framed screenshots, feature graphic, icon
     python tools/store_graphics.py iphone    App Store: framed iPhone 6.9" screenshots, icon
     python tools/store_graphics.py ipad      App Store: framed iPad 13" screenshots
@@ -9,7 +10,8 @@ Usage:
     python tools/store_graphics.py all       all of the above (skips raw shots that don't exist)
 
 Inputs (private, not in git; see docs/store-media.md):
-    media/icon/icon-master.png                   1024 x 1024 icon, no transparency
+    media/brand/Study-Cycle-Logo-2000x2000.png   the Study Cycle logo (owl in the cycle ring), 2023
+    media/icon/icon-master.png                   1024 x 1024 icon, no transparency (made by "icons")
     media/screenshots/android/raw/<shot>.png     Pixel 7 emulator, 1080 x 2400
     media/screenshots/ios/iphone-raw/<shot>.png  iPhone 17 Pro Max Simulator (6.9")
     media/screenshots/ios/ipad-raw/<shot>.png    iPad Pro 13-inch Simulator
@@ -143,6 +145,66 @@ def frame_set(platform: str) -> None:
         print(f"  {target.relative_to(ROOT)}  {canvas.size[0]}x{canvas.size[1]}")
 
 
+LOGO = MEDIA / "brand" / "Study-Cycle-Logo-2000x2000.png"
+ICON_DIR = MEDIA / "icon"
+ANDROID_RES = ROOT / "mobile" / "android" / "app" / "src" / "main" / "res"
+#: Android notification icon sizes (24 dp) per density.
+NOTIFICATION_SIZES = {"mdpi": 24, "hdpi": 36, "xhdpi": 48, "xxhdpi": 72, "xxxhdpi": 96}
+
+
+def logo(size: int) -> Image.Image:
+    """The logo (transparent background) scaled to fit a size x size square."""
+    mark = Image.open(LOGO).convert("RGBA")
+    mark = mark.crop(mark.getbbox())
+    scale = size / max(mark.size)
+    mark = mark.resize((round(mark.width * scale), round(mark.height * scale)), Image.LANCZOS)
+    square = Image.new("RGBA", (size, size), (0, 0, 0, 0))
+    square.alpha_composite(mark, ((size - mark.width) // 2, (size - mark.height) // 2))
+    return square
+
+
+def on_canvas(mark: Image.Image, size: int, background: tuple[int, int, int, int]) -> Image.Image:
+    canvas = Image.new("RGBA", (size, size), background)
+    canvas.alpha_composite(mark, ((size - mark.width) // 2, (size - mark.height) // 2))
+    return canvas
+
+
+def silhouette(mark: Image.Image, color: tuple[int, int, int] = (255, 255, 255)) -> Image.Image:
+    """The logo's shape in one color, for themed icons and the notification icon."""
+    solid = Image.new("RGBA", mark.size, (*color, 255))
+    solid.putalpha(mark.getchannel("A"))
+    return solid
+
+
+def icons() -> None:
+    """Icon sources for flutter_launcher_icons, and the Android notification icon.
+
+    - icon-master: the logo at 80% on white (the stores and iOS round the corners themselves).
+    - icon-foreground / icon-monochrome: Android adaptive icon layers. The logo is a ring, so at
+      64% it stays inside the 66% circle that every launcher shape keeps.
+    - drawable-*/ic_notification.png: the logo's silhouette, 24 dp. Android draws it in one color.
+    After this, run `dart run flutter_launcher_icons` in mobile/ (see CLAUDE.md for the pbxproj fix).
+    """
+    print("Icons")
+    ICON_DIR.mkdir(parents=True, exist_ok=True)
+    white = (255, 255, 255, 255)
+    master = on_canvas(logo(820), 1024, white).convert("RGB")
+    master.save(ICON_DIR / "icon-master.png", optimize=True)
+    master.resize((512, 512), Image.LANCZOS).save(ICON_DIR / "icon-512.png", optimize=True)
+    clear = (0, 0, 0, 0)
+    on_canvas(logo(655), 1024, clear).save(ICON_DIR / "icon-foreground.png", optimize=True)
+    on_canvas(silhouette(logo(655)), 1024, clear).save(ICON_DIR / "icon-monochrome.png", optimize=True)
+    for name in ("icon-master", "icon-512", "icon-foreground", "icon-monochrome"):
+        print(f"  {(ICON_DIR / name).relative_to(ROOT)}.png")
+    for density, size in NOTIFICATION_SIZES.items():
+        out = ANDROID_RES / f"drawable-{density}" / "ic_notification.png"
+        out.parent.mkdir(parents=True, exist_ok=True)
+        # Android keeps a 2 dp margin inside the 24 dp notification icon.
+        mark = silhouette(logo(round(size * 22 / 24)))
+        on_canvas(mark, size, clear).save(out, optimize=True)
+        print(f"  {out.relative_to(ROOT)}  {size}x{size}")
+
+
 def icon_master() -> Image.Image:
     icon = Image.open(MEDIA / "icon" / "icon-master.png")
     if icon.mode != "RGB":
@@ -213,8 +275,11 @@ def website_assets() -> None:
 
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    parser.add_argument("target", choices=["android", "iphone", "ipad", "website", "all"])
+    parser.add_argument("target", choices=["icons", "android", "iphone", "ipad", "website", "all"])
     target = parser.parse_args().target
+    if target == "icons":
+        icons()
+        return
     if target in ("android", "all"):
         android_assets()
     if target in ("iphone", "all"):
