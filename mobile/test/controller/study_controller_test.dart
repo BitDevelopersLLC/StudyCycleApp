@@ -140,6 +140,67 @@ void main() {
     expect(h.controller.alertAccess, AlertAccess.ready);
   });
 
+  test('a failing alert schedule never leaves the screen out of date', () async {
+    final h = Harness();
+    await h.controller.load();
+    h.notifier.throwOnSchedule = true;
+    var notified = 0;
+    h.controller.addListener(() => notified++);
+    await expectLater(h.controller.start(), throwsArgumentError);
+    expect(h.controller.timer.status, TimerStatus.running);
+    expect(notified, greaterThan(0));
+    // The queue keeps working after a failure.
+    h.notifier.throwOnSchedule = false;
+    await h.controller.pause();
+    expect(h.controller.timer.status, TimerStatus.paused);
+  });
+
+  test('coming back after a phase ended re-plans alerts from the current phase', () async {
+    final h = Harness();
+    h.notifier.access = AlertAccess.blocked;
+    await h.controller.load();
+    await h.controller.start();
+    await h.controller.setInForeground(value: false);
+
+    // While away, focus ends and the user turns notifications on in Settings.
+    h.clock.advance(const Duration(minutes: 95));
+    h.notifier.access = AlertAccess.ready;
+    await h.controller.setInForeground(value: true);
+
+    expect(h.controller.timer.phase, Phase.rest);
+    expect(h.notifier.scheduled.single.title, 'Break over');
+    expect(h.notifier.scheduled.single.at.isAfter(h.clock.now), isTrue);
+  });
+
+  test('actions run one at a time, in the order they were made', () async {
+    final h = Harness();
+    await h.controller.load();
+    await h.controller.start();
+    await Future.wait([
+      h.controller.setAutoStartFocus(value: true),
+      h.controller.setAutoStartFocus(value: false),
+      h.controller.start(),
+      h.controller.start(),
+    ]);
+    expect(h.controller.settings.autoStartFocus, isFalse);
+    expect(h.notifier.scheduled, hasLength(2));
+    expect(h.controller.timer.phaseEndsAt, h.clock.now.toUtc().add(const Duration(minutes: 90)));
+  });
+
+  test('alerts too close to now are not scheduled', () async {
+    final h = Harness();
+    await h.controller.load();
+    await h.controller.updatePlan(
+      CyclePlan(preset: CyclePreset.custom, focusMinutes: 5, breakMinutes: 1),
+    );
+    await h.controller.start();
+    h.clock.advance(const Duration(minutes: 4, seconds: 59));
+    await h.controller.pause();
+    await h.controller.resume();
+    // Focus ends in 1 s (too close to schedule); only the break-end alert remains.
+    expect(h.notifier.scheduled.single.title, 'Break over');
+  });
+
   test('damaged saved data starts fresh instead of crashing', () async {
     final h = Harness(
       saved: <String, Object>{'timer.v1': '{not json', 'history.v1': '[1,2,3]', 'plan.preset': 'x'},

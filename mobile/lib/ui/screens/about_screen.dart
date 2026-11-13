@@ -16,7 +16,9 @@ class AboutScreen extends StatelessWidget {
     appBar: AppBar(title: const Text('About')),
     body: SelectionArea(
       child: ListView(
-        padding: const EdgeInsets.fromLTRB(20, 8, 20, 32),
+        padding:
+            const EdgeInsets.fromLTRB(20, 8, 20, 32) +
+            MediaQuery.paddingOf(context).copyWith(top: 0),
         children: const [
           _Section(
             title: 'How it works',
@@ -35,8 +37,9 @@ class AboutScreen extends StatelessWidget {
               'In a well-known study of expert violinists, the best players practiced in '
                   'sessions of about an hour to an hour and a half, with breaks in between, '
                   'and rarely more than four hours a day.',
-              'A 2022 review of 22 studies found that short breaks reliably reduce tiredness '
-                  'and can help performance.',
+              'A 2022 review of 22 study groups (2,335 people) found that short breaks give a '
+                  'small boost in energy and reduce tiredness. Their effect on performance was '
+                  'clear only for less demanding tasks.',
               'There is no proof that exactly 90 minutes is best for everyone. Use it as a '
                   'starting point, and try the 50- or 25-minute cycles, or set your own.',
             ],

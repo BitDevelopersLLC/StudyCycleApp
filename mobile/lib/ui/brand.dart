@@ -47,7 +47,10 @@ Color phaseColor(TimerState state, Brightness brightness) {
   if (state.status == TimerStatus.paused) {
     return dark ? BrandColors.paused : BrandColors.pausedDark;
   }
-  if (state.status == TimerStatus.idle || state.phase == Phase.focus) {
+  // Waiting means the next step is a focus block, so it uses the focus color too.
+  if (state.status == TimerStatus.idle ||
+      state.status == TimerStatus.waiting ||
+      state.phase == Phase.focus) {
     return dark ? BrandColors.focus : BrandColors.focusDark;
   }
   return dark ? BrandColors.rest : BrandColors.restDark;

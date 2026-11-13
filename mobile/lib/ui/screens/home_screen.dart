@@ -30,6 +30,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   Timer? _ticker;
+  bool _visible = true;
 
   StudyController get _controller => widget.controller;
 
@@ -51,19 +52,14 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    final visible = state == AppLifecycleState.resumed;
-    unawaited(_controller.setInForeground(value: visible));
-    if (visible) {
-      _syncTicker();
-    } else {
-      _ticker?.cancel();
-      _ticker = null;
-    }
+    _visible = state == AppLifecycleState.resumed;
+    unawaited(_controller.setInForeground(value: _visible));
+    _syncTicker();
   }
 
-  /// Runs the one-second ticker only while a phase is counting down.
+  /// Runs the one-second ticker only while a phase is counting down and the app is visible.
   void _syncTicker() {
-    final running = _controller.timer.status == TimerStatus.running;
+    final running = _visible && _controller.timer.status == TimerStatus.running;
     if (running && _ticker == null) {
       _ticker = Timer.periodic(const Duration(seconds: 1), (_) => unawaited(_controller.refresh()));
     } else if (!running) {

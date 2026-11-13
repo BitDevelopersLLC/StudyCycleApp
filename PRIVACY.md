@@ -18,8 +18,8 @@ Nothing. Study Cycle has:
 Your settings (cycle lengths and timer options), the current timer and your study totals (focus
 minutes and finished cycles per day) are stored only on your phone. Uninstalling the app deletes
 them, and you can delete your study totals at any time on the Progress screen. On iPhone, they may
-be included in your own device backup if you have turned that on. Android app backup is turned off
-for Study Cycle.
+be included in your own device backup if you have turned that on. On Android, Study Cycle turns off
+both cloud backup and phone-to-phone transfer, so they stay on this phone.
 
 ## Notifications
 

@@ -34,7 +34,18 @@ class FakeNotifier implements PhaseNotifier {
   Future<void> openExactAlarmSettings() async => settingsOpened++;
 
   @override
-  Future<void> schedule(List<PhaseAlert> alerts) async => scheduled = List.of(alerts);
+  Future<void> schedule(List<PhaseAlert> alerts, {required DateTime now}) async {
+    if (throwOnSchedule) {
+      throw ArgumentError('scheduled date must be in the future');
+    }
+    scheduled = [
+      for (final alert in alerts)
+        if (!alert.at.isBefore(now.add(PhaseAlertPlanner.minimumLead))) alert,
+    ];
+  }
+
+  /// When true, [schedule] throws like the plugin does for a time in the past.
+  bool throwOnSchedule = false;
 
   @override
   Future<void> cancelPending() async => scheduled = <PhaseAlert>[];

@@ -39,6 +39,16 @@ void main() {
     expect(history.dayOf(now), const DayTotal(focus: Duration(minutes: 120), cycles: 1));
   });
 
+  test('a block crossing midnight is split between the two days', () {
+    final endedAt = DateTime(2026, 11, 12, 0, 30);
+    final history = StudyHistory().record([focus(endedAt, 90)], now);
+    expect(history.dayOf(DateTime(2026, 11, 11, 12)), const DayTotal(focus: Duration(minutes: 60)));
+    expect(
+      history.dayOf(DateTime(2026, 11, 12, 12)),
+      const DayTotal(focus: Duration(minutes: 30), cycles: 1),
+    );
+  });
+
   test('last 7 days, oldest first, with empty days as zero', () {
     final history = StudyHistory().record([
       focus(now, 50),

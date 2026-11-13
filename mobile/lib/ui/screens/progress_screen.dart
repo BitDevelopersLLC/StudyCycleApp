@@ -35,7 +35,7 @@ class ProgressScreen extends StatelessWidget {
         final theme = Theme.of(context);
 
         return ListView(
-          padding: const EdgeInsets.all(16),
+          padding: const EdgeInsets.all(16) + MediaQuery.paddingOf(context).copyWith(top: 0),
           children: [
             Row(
               children: [

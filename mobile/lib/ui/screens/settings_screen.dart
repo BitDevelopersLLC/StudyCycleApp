@@ -174,8 +174,9 @@ class _SectionTitle extends StatelessWidget {
   );
 }
 
-/// A labeled slider for whole minutes.
-class _MinutesSlider extends StatelessWidget {
+/// A labeled slider for whole minutes. It moves freely while dragged and saves once, when the
+/// finger lifts, so dragging doesn't save and reschedule alerts dozens of times.
+class _MinutesSlider extends StatefulWidget {
   const _MinutesSlider({
     required this.label,
     required this.value,
@@ -193,24 +194,45 @@ class _MinutesSlider extends StatelessWidget {
   final ValueChanged<int> onChanged;
 
   @override
-  Widget build(BuildContext context) => Padding(
-    padding: const EdgeInsets.symmetric(horizontal: 16),
-    child: Row(
-      children: [
-        SizedBox(width: 56, child: Text(label)),
-        Expanded(
-          child: Slider(
-            value: value.toDouble(),
-            min: min.toDouble(),
-            max: max.toDouble(),
-            divisions: (max - min) ~/ step,
-            label: '$value min',
-            semanticFormatterCallback: (v) => '$label ${v.round()} ${v.round() == 1 ? 'minute' : 'minutes'}',
-            onChanged: (v) => onChanged(v.round()),
+  State<_MinutesSlider> createState() => _MinutesSliderState();
+}
+
+class _MinutesSliderState extends State<_MinutesSlider> {
+  int? _dragging;
+
+  static String _minutes(int value) => '$value ${value == 1 ? 'minute' : 'minutes'}';
+
+  @override
+  Widget build(BuildContext context) {
+    final value = _dragging ?? widget.value;
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          // Label and value on their own line, so large text sizes never squeeze them.
+          Wrap(
+            alignment: WrapAlignment.spaceBetween,
+            children: [
+              Text(widget.label, style: Theme.of(context).textTheme.titleSmall),
+              Text(_minutes(value)),
+            ],
           ),
-        ),
-        SizedBox(width: 64, child: Text('$value min', textAlign: TextAlign.end)),
-      ],
-    ),
-  );
+          Slider(
+            value: value.toDouble(),
+            min: widget.min.toDouble(),
+            max: widget.max.toDouble(),
+            divisions: (widget.max - widget.min) ~/ widget.step,
+            label: _minutes(value),
+            semanticFormatterCallback: (v) => '${widget.label} ${_minutes(v.round())}',
+            onChanged: (v) => setState(() => _dragging = v.round()),
+            onChangeEnd: (v) {
+              setState(() => _dragging = null);
+              widget.onChanged(v.round());
+            },
+          ),
+        ],
+      ),
+    );
+  }
 }

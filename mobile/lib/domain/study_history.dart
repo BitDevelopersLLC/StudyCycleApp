@@ -86,9 +86,22 @@ class StudyHistory {
       if (phase.phase != Phase.focus || phase.duration < minimumFocus) {
         continue;
       }
-      final key = dayKey(phase.endedAt);
-      final added = DayTotal(focus: phase.duration, cycles: phase.finished ? 1 : 0);
-      updated[key] = (updated[key] ?? const DayTotal()) + added;
+      // A block that crosses midnight is split between the days; the cycle counts on the day
+      // it finished.
+      final end = phase.endedAt.toLocal();
+      var start = end.subtract(phase.duration);
+      while (start.isBefore(end)) {
+        final nextMidnight = DateTime(start.year, start.month, start.day + 1);
+        final sliceEnd = nextMidnight.isBefore(end) ? nextMidnight : end;
+        final finishesHere = sliceEnd == end;
+        final key = dayKey(start);
+        final added = DayTotal(
+          focus: sliceEnd.difference(start),
+          cycles: finishesHere && phase.finished ? 1 : 0,
+        );
+        updated[key] = (updated[key] ?? const DayTotal()) + added;
+        start = sliceEnd;
+      }
     }
     final oldestKept = dayKey(_daysBefore(now, keepDays - 1));
     updated.removeWhere((key, _) => key.compareTo(oldestKept) < 0);

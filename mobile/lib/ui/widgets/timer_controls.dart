@@ -65,7 +65,7 @@ class TimerControls extends StatelessWidget {
             children: [
               if (state.status == TimerStatus.running || state.status == TimerStatus.paused)
                 TextButton.icon(
-                  onPressed: () => unawaited(controller.skip()),
+                  onPressed: () => unawaited(controller.skip(expected: state.phase)),
                   icon: const Icon(Icons.skip_next_rounded),
                   label: Text(skipLabel),
                 ),

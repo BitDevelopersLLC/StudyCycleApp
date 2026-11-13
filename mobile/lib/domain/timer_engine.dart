@@ -130,9 +130,16 @@ abstract final class TimerEngine {
 
   /// Ends the current phase early at [now] and moves on: focus goes to a break, and a break goes
   /// straight to focus (the user asked for it, so there is no waiting).
-  static TimerUpdate skip(TimerState state, TimerRules rules, DateTime now) {
+  ///
+  /// [expected] is the phase the user was looking at. If that phase already ended by itself
+  /// (the tap landed right at the boundary), only the catch-up happens, so a tap on "Start break
+  /// now" can never skip the break that just began.
+  static TimerUpdate skip(TimerState state, TimerRules rules, DateTime now, {Phase? expected}) {
     final caughtUp = advance(state, rules, now);
     final current = caughtUp.state;
+    if (expected != null && caughtUp.completed.isNotEmpty) {
+      return caughtUp;
+    }
     switch (current.status) {
       case TimerStatus.idle:
         return caughtUp;

@@ -7,6 +7,7 @@ library;
 import 'dart:io' show Platform;
 
 import 'package:flutter/foundation.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:timezone/timezone.dart' as tz;
 
@@ -39,8 +40,9 @@ abstract interface class PhaseNotifier {
   /// Opens the Android setting that allows on-time alerts ("Alarms & reminders").
   Future<void> openExactAlarmSettings();
 
-  /// Replaces every alert still waiting to be shown with [alerts].
-  Future<void> schedule(List<PhaseAlert> alerts);
+  /// Replaces every alert still waiting to be shown with [alerts]. Alerts that are not at least
+  /// [PhaseAlertPlanner.minimumLead] after [now] are skipped (the system can't schedule the past).
+  Future<void> schedule(List<PhaseAlert> alerts, {required DateTime now});
 
   /// Cancels the alerts still waiting to be shown. Alerts already on screen stay.
   Future<void> cancelPending();
@@ -96,10 +98,15 @@ class LocalPhaseNotifier implements PhaseNotifier {
 
   @override
   Future<AlertAccess> requestAccess() async {
-    if (_isAndroid) {
-      await _android?.requestNotificationsPermission();
-    } else {
-      await _ios?.requestPermissions(alert: true, sound: true);
+    try {
+      if (_isAndroid) {
+        await _android?.requestNotificationsPermission();
+      } else {
+        await _ios?.requestPermissions(alert: true, sound: true);
+      }
+    } on PlatformException catch (error) {
+      // For example "a permission request is already in progress". The answer is read below.
+      debugPrint('Notification permission request failed: ${error.message}');
     }
     return checkAccess();
   }
@@ -127,18 +134,27 @@ class LocalPhaseNotifier implements PhaseNotifier {
   }
 
   @override
-  Future<void> schedule(List<PhaseAlert> alerts) async {
+  Future<void> schedule(List<PhaseAlert> alerts, {required DateTime now}) async {
     await _plugin.cancelAllPendingNotifications();
     final mode = await _scheduleMode();
+    final earliest = now.add(PhaseAlertPlanner.minimumLead);
     for (final (index, alert) in alerts.indexed) {
-      await _plugin.zonedSchedule(
-        id: index + 1,
-        scheduledDate: tz.TZDateTime.from(alert.at, tz.UTC),
-        notificationDetails: _details,
-        androidScheduleMode: mode,
-        title: alert.title,
-        body: alert.body,
-      );
+      if (alert.at.isBefore(earliest)) {
+        continue;
+      }
+      try {
+        await _plugin.zonedSchedule(
+          id: index + 1,
+          scheduledDate: tz.TZDateTime.from(alert.at, tz.UTC),
+          notificationDetails: _details,
+          androidScheduleMode: mode,
+          title: alert.title,
+          body: alert.body,
+        );
+      } on Object catch (error) {
+        // One alert failing must not stop the others from being scheduled.
+        debugPrint('Scheduling an alert failed: $error');
+      }
     }
   }
 

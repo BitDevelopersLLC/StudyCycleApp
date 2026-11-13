@@ -27,6 +27,10 @@ abstract final class PhaseAlertPlanner {
   /// The most alerts scheduled at once. iOS allows 64 pending notifications per app.
   static const int maxAlerts = 12;
 
+  /// How far ahead an alert must be to be scheduled. Closer ones would be in the past by the
+  /// time the system receives them.
+  static const Duration minimumLead = Duration(seconds: 2);
+
   /// The alerts for every phase end coming up from [state], following [rules] the same way
   /// `TimerEngine.advance` would. Returns an empty list unless the timer is running.
   static List<PhaseAlert> plan(TimerState state, TimerRules rules) {

@@ -154,6 +154,20 @@ void main() {
       expect(update.state.phaseEndsAt, at(100));
     });
 
+    test('a tap on "Start break now" landing just after focus ended keeps the break', () {
+      final update = TimerEngine.skip(started(), rules, at(90, 1), expected: Phase.focus);
+      expect(update.state.phase, Phase.rest);
+      expect(update.state.status, TimerStatus.running);
+      expect(update.state.phaseEndsAt, at(110));
+      expect(update.completed, hasLength(1));
+    });
+
+    test('with the expected phase still running, skip works as usual', () {
+      final update = TimerEngine.skip(started(), rules, at(40), expected: Phase.focus);
+      expect(update.state.phase, Phase.rest);
+      expect(update.state.phaseEndsAt, at(60));
+    });
+
     test('skip from waiting starts focus; skip from idle does nothing', () {
       final waiting = TimerEngine.advance(started(), rules, at(200)).state;
       expect(TimerEngine.skip(waiting, rules, at(201)).state.phase, Phase.focus);
