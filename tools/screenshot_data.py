@@ -3,7 +3,7 @@
 
 Usage:
     python tools/screenshot_data.py android <scene> [--adb PATH]
-    python tools/screenshot_data.py ios <scene>
+    python tools/screenshot_data.py ios <scene> [--device UDID]
 
 Scenes: focus, break, idle (progress, settings and about use "idle"), and alert: idle with a
 5-minute custom focus block, so a real "Focus done" alert arrives 5 minutes after you tap Start.
@@ -114,7 +114,7 @@ def android(scene: str, adb: str) -> None:
     print(f"android: wrote the {scene} scene for {today}")
 
 
-def ios(scene: str) -> None:
+def ios(scene: str, device: str = "booted") -> None:
     """Writes the app's preferences file in the booted Simulator (the app must be installed).
 
     shared_preferences keeps its values in NSUserDefaults with the "flutter." prefix, which is the
@@ -125,8 +125,8 @@ def ios(scene: str) -> None:
     def simctl(*a: str) -> str:
         return subprocess.run(["xcrun", "simctl", *a], check=True, capture_output=True, text=True).stdout
 
-    subprocess.run(["xcrun", "simctl", "terminate", "booted", IOS_ID], check=False, capture_output=True)
-    container = Path(simctl("get_app_container", "booted", IOS_ID, "data").strip())
+    subprocess.run(["xcrun", "simctl", "terminate", device, IOS_ID], check=False, capture_output=True)
+    container = Path(simctl("get_app_container", device, IOS_ID, "data").strip())
     plist = container / "Library" / "Preferences" / f"{IOS_ID}.plist"
     current: dict[str, object] = {}
     if plist.exists():
@@ -141,7 +141,7 @@ def ios(scene: str) -> None:
     plist.write_bytes(plistlib.dumps(current, fmt=plistlib.FMT_BINARY))
     # The Simulator's preferences daemon caches values and the runtime has no killall, so stop it
     # through the Simulator's launchd (which restarts it) to make it reread the file.
-    subprocess.run(["xcrun", "simctl", "spawn", "booted", "launchctl", "kill", "TERM",
+    subprocess.run(["xcrun", "simctl", "spawn", device, "launchctl", "kill", "TERM",
                     "system/com.apple.cfprefsd.xpc.daemon"], check=True, capture_output=True)
     print(f"ios: wrote the {scene} scene for {today} to {plist}")
 
@@ -151,11 +151,13 @@ def main() -> None:
     parser.add_argument("platform", choices=["android", "ios"])
     parser.add_argument("scene", choices=["focus", "break", "idle", "alert"])
     parser.add_argument("--adb", default="adb", help="path to adb (Android only)")
+    parser.add_argument("--device", default="booted",
+                        help="Simulator UDID (iOS only; needed when several are booted)")
     args = parser.parse_args()
     if args.platform == "android":
         android(args.scene, args.adb)
     else:
-        ios(args.scene)
+        ios(args.scene, args.device)
 
 
 if __name__ == "__main__":
