@@ -10,6 +10,7 @@ import '../../domain/break_tips.dart';
 import '../../domain/timer_state.dart';
 import '../../platform/phase_notifier.dart';
 import '../brand.dart';
+import '../widgets/readable_width.dart';
 import '../widgets/timer_controls.dart';
 import '../widgets/timer_dial.dart';
 import 'about_screen.dart';
@@ -94,10 +95,12 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
         ),
       ],
     ),
-    body: SafeArea(
-      child: ListenableBuilder(
-        listenable: _controller,
-        builder: (context, _) => _TimerBody(controller: _controller),
+    body: ReadableWidth(
+      child: SafeArea(
+        child: ListenableBuilder(
+          listenable: _controller,
+          builder: (context, _) => _TimerBody(controller: _controller),
+        ),
       ),
     ),
   );

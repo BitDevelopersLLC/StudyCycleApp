@@ -9,6 +9,7 @@ import '../../controller/study_controller.dart';
 import '../../domain/cycle_plan.dart';
 import '../../domain/timer_engine.dart';
 import '../../platform/phase_notifier.dart';
+import '../widgets/readable_width.dart';
 
 /// The Settings screen. Every change is saved immediately.
 class SettingsScreen extends StatelessWidget {
@@ -21,113 +22,115 @@ class SettingsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Scaffold(
     appBar: AppBar(title: const Text('Settings')),
-    body: ListenableBuilder(
-      listenable: controller,
-      builder: (context, _) {
-        final settings = controller.settings;
-        final plan = settings.plan;
-        final theme = Theme.of(context);
-        return ListView(
-          children: [
-            const _SectionTitle('Cycle length'),
-            RadioGroup<CyclePreset>(
-              groupValue: plan.preset,
-              onChanged: (preset) {
-                if (preset != null) {
-                  unawaited(controller.updatePlan(_planFor(preset, plan)));
-                }
-              },
-              child: Column(
-                children: [
-                  for (final preset in CyclePreset.values)
-                    RadioListTile<CyclePreset>(
-                      value: preset,
-                      title: Text(preset.label),
-                      subtitle: Text(
-                        preset == CyclePreset.custom
-                            ? 'Choose your own lengths'
-                            : '${preset.focusMinutes} min focus · ${preset.breakMinutes} min break',
+    body: ReadableWidth(
+      child: ListenableBuilder(
+        listenable: controller,
+        builder: (context, _) {
+          final settings = controller.settings;
+          final plan = settings.plan;
+          final theme = Theme.of(context);
+          return ListView(
+            children: [
+              const _SectionTitle('Cycle length'),
+              RadioGroup<CyclePreset>(
+                groupValue: plan.preset,
+                onChanged: (preset) {
+                  if (preset != null) {
+                    unawaited(controller.updatePlan(_planFor(preset, plan)));
+                  }
+                },
+                child: Column(
+                  children: [
+                    for (final preset in CyclePreset.values)
+                      RadioListTile<CyclePreset>(
+                        value: preset,
+                        title: Text(preset.label),
+                        subtitle: Text(
+                          preset == CyclePreset.custom
+                              ? 'Choose your own lengths'
+                              : '${preset.focusMinutes} min focus · ${preset.breakMinutes} min break',
+                        ),
+                      ),
+                  ],
+                ),
+              ),
+              if (plan.preset == CyclePreset.custom) ...[
+                _MinutesSlider(
+                  label: 'Focus',
+                  value: plan.focusMinutes,
+                  min: CyclePlan.minFocusMinutes,
+                  max: CyclePlan.maxFocusMinutes,
+                  step: 5,
+                  onChanged: (minutes) => unawaited(
+                    controller.updatePlan(
+                      CyclePlan(
+                        preset: CyclePreset.custom,
+                        focusMinutes: minutes,
+                        breakMinutes: plan.breakMinutes,
                       ),
                     ),
-                ],
-              ),
-            ),
-            if (plan.preset == CyclePreset.custom) ...[
-              _MinutesSlider(
-                label: 'Focus',
-                value: plan.focusMinutes,
-                min: CyclePlan.minFocusMinutes,
-                max: CyclePlan.maxFocusMinutes,
-                step: 5,
-                onChanged: (minutes) => unawaited(
-                  controller.updatePlan(
-                    CyclePlan(
-                      preset: CyclePreset.custom,
-                      focusMinutes: minutes,
-                      breakMinutes: plan.breakMinutes,
+                  ),
+                ),
+                _MinutesSlider(
+                  label: 'Break',
+                  value: plan.breakMinutes,
+                  min: CyclePlan.minBreakMinutes,
+                  max: CyclePlan.maxBreakMinutes,
+                  step: 1,
+                  onChanged: (minutes) => unawaited(
+                    controller.updatePlan(
+                      CyclePlan(
+                        preset: CyclePreset.custom,
+                        focusMinutes: plan.focusMinutes,
+                        breakMinutes: minutes,
+                      ),
                     ),
                   ),
                 ),
-              ),
-              _MinutesSlider(
-                label: 'Break',
-                value: plan.breakMinutes,
-                min: CyclePlan.minBreakMinutes,
-                max: CyclePlan.maxBreakMinutes,
-                step: 1,
-                onChanged: (minutes) => unawaited(
-                  controller.updatePlan(
-                    CyclePlan(
-                      preset: CyclePreset.custom,
-                      focusMinutes: plan.focusMinutes,
-                      breakMinutes: minutes,
-                    ),
-                  ),
+              ],
+              Padding(
+                padding: const EdgeInsets.fromLTRB(16, 4, 16, 8),
+                child: Text(
+                  'A change applies from the next focus block or break.',
+                  style: theme.textTheme.bodySmall,
                 ),
+              ),
+              const Divider(),
+              const _SectionTitle('Timer'),
+              SwitchListTile(
+                title: const Text('Start the next focus block automatically'),
+                subtitle: const Text(
+                  'When a break ends. After ${TimerRules.maxAutoStarts} automatic starts in a '
+                  'row, Study Cycle waits for you, so a forgotten timer stops counting.',
+                ),
+                value: settings.autoStartFocus,
+                onChanged: (value) => unawaited(controller.setAutoStartFocus(value: value)),
+              ),
+              SwitchListTile(
+                title: const Text('Keep the screen on'),
+                subtitle: const Text('While the timer runs and Study Cycle is open.'),
+                value: settings.keepScreenOn,
+                onChanged: (value) => unawaited(controller.setKeepScreenOn(value: value)),
+              ),
+              const Divider(),
+              const _SectionTitle('Alerts'),
+              ListTile(
+                leading: Icon(_accessIcon(controller.alertAccess)),
+                title: Text(_accessText(controller.alertAccess)),
+                subtitle: controller.alertAccess == AlertAccess.blocked
+                    ? const Text('Turn on notifications for Study Cycle in your phone\'s Settings.')
+                    : null,
+                trailing: controller.alertAccess == AlertAccess.mayBeLate
+                    ? TextButton(
+                        onPressed: () => unawaited(controller.openExactAlarmSettings()),
+                        child: const Text('Allow'),
+                      )
+                    : null,
               ),
             ],
-            Padding(
-              padding: const EdgeInsets.fromLTRB(16, 4, 16, 8),
-              child: Text(
-                'A change applies from the next focus block or break.',
-                style: theme.textTheme.bodySmall,
-              ),
-            ),
-            const Divider(),
-            const _SectionTitle('Timer'),
-            SwitchListTile(
-              title: const Text('Start the next focus block automatically'),
-              subtitle: const Text(
-                'When a break ends. After ${TimerRules.maxAutoStarts} automatic starts in a '
-                'row, Study Cycle waits for you, so a forgotten timer stops counting.',
-              ),
-              value: settings.autoStartFocus,
-              onChanged: (value) => unawaited(controller.setAutoStartFocus(value: value)),
-            ),
-            SwitchListTile(
-              title: const Text('Keep the screen on'),
-              subtitle: const Text('While the timer runs and Study Cycle is open.'),
-              value: settings.keepScreenOn,
-              onChanged: (value) => unawaited(controller.setKeepScreenOn(value: value)),
-            ),
-            const Divider(),
-            const _SectionTitle('Alerts'),
-            ListTile(
-              leading: Icon(_accessIcon(controller.alertAccess)),
-              title: Text(_accessText(controller.alertAccess)),
-              subtitle: controller.alertAccess == AlertAccess.blocked
-                  ? const Text('Turn on notifications for Study Cycle in your phone\'s Settings.')
-                  : null,
-              trailing: controller.alertAccess == AlertAccess.mayBeLate
-                  ? TextButton(
-                      onPressed: () => unawaited(controller.openExactAlarmSettings()),
-                      child: const Text('Allow'),
-                    )
-                  : null,
-            ),
-          ],
-        );
-      },
+          );
+        },
+      ),
     ),
   );
 

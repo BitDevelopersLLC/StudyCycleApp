@@ -4,6 +4,7 @@ import 'package:study_cycle/app.dart';
 import 'package:study_cycle/domain/cycle_plan.dart';
 import 'package:study_cycle/domain/timer_state.dart';
 import 'package:study_cycle/platform/phase_notifier.dart';
+import 'package:study_cycle/ui/widgets/readable_width.dart';
 
 import '../fakes.dart';
 
@@ -146,5 +147,23 @@ void main() {
     addTearDown(tester.platformDispatcher.clearPlatformBrightnessTestValue);
     await pumpApp(tester);
     expect(find.text('Start focus'), findsOneWidget);
+  });
+
+  testWidgets('on a tablet the content stays in a centered column', (tester) async {
+    // iPad Pro 13" in portrait: 1032 x 1376 logical pixels.
+    tester.view.physicalSize = const Size(2064, 2752);
+    tester.view.devicePixelRatio = 2;
+    addTearDown(tester.view.reset);
+    final h = Harness();
+    await h.controller.load();
+    await tester.pumpWidget(StudyCycleApp(controller: h.controller));
+
+    final dial = tester.getRect(find.text('Ready'));
+    expect(dial.center.dx, closeTo(1032 / 2, 1));
+    // ReadableWidth fills the screen; the box inside it is the limited column.
+    final column = tester.getSize(
+      find.descendant(of: find.byType(ReadableWidth), matching: find.byType(ConstrainedBox)).first,
+    );
+    expect(column.width, ReadableWidth.defaultMaxWidth);
   });
 }

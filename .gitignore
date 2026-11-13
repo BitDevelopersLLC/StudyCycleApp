@@ -2,8 +2,10 @@
 .claude/
 CLAUDE.md
 ClaudeLog.md
-# Store listings and release walkthroughs.
+# Store listings and release walkthroughs, and the Mac handover notes.
 docs/
+MAC-START.md
+HANDOFF-FROM-MAC.md
 
 # Brand assets (logo, icons, screenshots, store graphics) are not part of the open-source release.
 media/

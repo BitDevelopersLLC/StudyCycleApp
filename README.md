@@ -79,6 +79,13 @@ Android release builds are signed with an upload key referenced from `mobile/and
 which is never committed. Building a Play bundle without it fails on purpose. To make your own
 copy, see [Sign the app](https://docs.flutter.dev/deployment/android#sign-the-app).
 
+### Store screenshots
+
+`tools/screenshot_data.py` puts made-up sample data (two weeks of study sessions) into a debug build
+on an Android emulator or the iOS Simulator, so the screenshots show a realistic Progress screen.
+`tools/store_graphics.py` frames the screenshots for Google Play and the App Store. Both need
+Python 3 with Pillow. The brand images they read (`media/`) are not part of this repository.
+
 ## Privacy, verified
 
 The Android release build has **no `INTERNET` permission**, so it cannot send or receive
