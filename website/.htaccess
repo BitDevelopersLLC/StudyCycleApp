@@ -50,11 +50,18 @@ RewriteRule ^privacy/?$ privacy.html [L]
   Header always set Permissions-Policy "camera=(), microphone=(), geolocation=(), interest-cohort=()"
   # Everything is served from this site; nothing loads from elsewhere.
   Header always set Content-Security-Policy "default-src 'self'; img-src 'self'; style-src 'self'; script-src 'none'; object-src 'none'; base-uri 'self'; form-action 'none'; frame-ancestors 'none'"
+  # The web timer (/app/) runs its own two script files and nothing else. connect-src 'none'
+  # means it can't send anything anywhere, even if its code were changed.
+  <If "%{REQUEST_URI} =~ m#^/app/#">
+    Header always set Content-Security-Policy "default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; connect-src 'none'; media-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'"
+  </If>
 </IfModule>
 
 <IfModule mod_expires.c>
   ExpiresActive On
   ExpiresByType text/css "access plus 1 week"
+  ExpiresByType text/javascript "access plus 1 week"
+  ExpiresByType application/javascript "access plus 1 week"
   ExpiresByType image/png "access plus 1 month"
   ExpiresByType image/x-icon "access plus 1 month"
   ExpiresByType text/html "access plus 0 seconds"

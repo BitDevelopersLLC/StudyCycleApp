@@ -1,0 +1,265 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Study Cycle for the web: focus and break timer</title>
+  <meta name="description" content="Use the Study Cycle timer in your browser: 90-minute focus blocks and real breaks, with alerts, progress and streaks. No account, nothing collected.">
+  <link rel="canonical" href="https://studycycle.app/app/">
+  <meta name="theme-color" content="#1f6fa8">
+  <meta name="color-scheme" content="light dark">
+  <link rel="icon" href="/assets/img/favicon.ico?v=2" sizes="any">
+  <link rel="icon" href="/assets/img/favicon-32.png?v=2" type="image/png" sizes="32x32">
+  <link rel="apple-touch-icon" href="/assets/img/apple-touch-icon.png?v=2">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Study Cycle for the web">
+  <meta property="og:description" content="Focus in cycles, take real breaks. The Study Cycle timer in your browser, with nothing collected.">
+  <meta property="og:url" content="https://studycycle.app/app/">
+  <meta property="og:image" content="https://studycycle.app/assets/img/social-card.png?v=2">
+  <link rel="stylesheet" href="app.css?v=1">
+  <script type="module" src="app.js?v=1"></script>
+</head>
+<body>
+  <!-- Icons, drawn once and reused. -->
+  <svg class="sprite" aria-hidden="true" focusable="false">
+    <symbol id="i-chart" viewBox="0 0 24 24"><path d="M3.5 18.5 9 13l4 4 7.5-8.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M4 4.5l.8 1.6 1.7.3-1.2 1.2.3 1.7L4 8.5l-1.6.8.3-1.7-1.2-1.2 1.7-.3z" fill="currentColor"/></symbol>
+    <symbol id="i-gear" viewBox="0 0 24 24"><path d="M12 15.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7Zm7.4-2.5.2-1-.2-1 2-1.6-2-3.4-2.4 1a7 7 0 0 0-1.7-1L14.9 3h-3.8l-.4 2.6a7 7 0 0 0-1.7 1l-2.4-1-2 3.4 2 1.6-.1 1 .1 1-2 1.6 2 3.4 2.4-1a7 7 0 0 0 1.7 1l.4 2.6h3.8l.4-2.6a7 7 0 0 0 1.7-1l2.4 1 2-3.4z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></symbol>
+    <symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 11v6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="12" cy="7.5" r="1.3" fill="currentColor"/></symbol>
+    <symbol id="i-back" viewBox="0 0 24 24"><path d="M20 12H5m6-7-7 7 7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-play" viewBox="0 0 24 24"><path d="M8 5.5v13l10.5-6.5z" fill="currentColor"/></symbol>
+    <symbol id="i-pause" viewBox="0 0 24 24"><path d="M7 5h3.5v14H7zm6.5 0H17v14h-3.5z" fill="currentColor"/></symbol>
+    <symbol id="i-skip" viewBox="0 0 24 24"><path d="M6 6v12l8.5-6zm10 0h2.5v12H16z" fill="currentColor"/></symbol>
+    <symbol id="i-stop" viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="12" rx="2" fill="currentColor"/></symbol>
+    <symbol id="i-trash" viewBox="0 0 24 24"><path d="M5 7h14M10 7V4.5h4V7m-7 0 1 13h8l1-13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  </svg>
+
+  <header class="bar">
+    <div class="bar-inner">
+      <div class="bar-main" data-show="timer">
+        <img src="/assets/img/apple-touch-icon.png?v=2" alt="" width="32" height="32">
+        <h1>Study Cycle</h1>
+      </div>
+      <div class="bar-main" data-show="sub" hidden>
+        <a class="icon-btn" href="#" aria-label="Back to the timer"><svg><use href="#i-back"/></svg></a>
+        <h1 id="sub-title">Settings</h1>
+      </div>
+      <nav class="bar-actions" aria-label="Study Cycle" data-show="timer">
+        <a class="icon-btn" href="#progress" aria-label="Progress" title="Progress"><svg><use href="#i-chart"/></svg></a>
+        <a class="icon-btn" href="#settings" aria-label="Settings" title="Settings"><svg><use href="#i-gear"/></svg></a>
+        <a class="icon-btn" href="#about" aria-label="About" title="About"><svg><use href="#i-info"/></svg></a>
+      </nav>
+    </div>
+  </header>
+
+  <noscript>
+    <p class="note-box">The Study Cycle web timer needs JavaScript. Everything runs in your browser and
+      nothing is sent anywhere. You can also get the app for iPhone and Android:
+      <a href="/">studycycle.app</a>.</p>
+  </noscript>
+
+  <main id="main">
+    <!-- Timer -->
+    <section class="view" id="view-timer" aria-label="Timer">
+      <div class="banner" id="alert-banner" hidden>
+        <p id="alert-banner-text"></p>
+        <button class="text-btn" id="alert-banner-allow" type="button" hidden>Allow notifications</button>
+      </div>
+
+      <div class="dial" id="dial" role="img" aria-label="Ready.">
+        <svg viewBox="0 0 260 260" aria-hidden="true">
+          <circle class="ring-track" cx="130" cy="130" r="122"/>
+          <circle class="ring-fill" id="ring" cx="130" cy="130" r="122" pathLength="1000"/>
+        </svg>
+        <div class="dial-text" aria-hidden="true">
+          <span class="dial-label" id="dial-label">Ready</span>
+          <span class="dial-time" id="dial-time">1:30:00</span>
+          <span class="dial-cycle" id="dial-cycle"></span>
+        </div>
+      </div>
+
+      <p class="guidance" id="guidance"></p>
+
+      <div class="controls">
+        <button class="primary-btn" id="primary" type="button">
+          <svg><use href="#i-play"/></svg><span id="primary-text">Start focus</span>
+        </button>
+        <div class="secondary" id="secondary" hidden>
+          <button class="text-btn" id="skip" type="button"><svg><use href="#i-skip"/></svg><span>Start break now</span></button>
+          <button class="text-btn" id="end" type="button"><svg><use href="#i-stop"/></svg><span>End session</span></button>
+        </div>
+      </div>
+
+      <p class="today" id="today"></p>
+      <p class="web-note">
+        Keep this tab open: alerts work while it's open, even in the background.
+        On a phone, the <a href="/">Study Cycle app</a> works better, because its alerts arrive even
+        when the browser is closed.
+      </p>
+    </section>
+
+    <!-- Progress -->
+    <section class="view" id="view-progress" aria-labelledby="sub-title" hidden>
+      <div class="cards two">
+        <div class="card">
+          <h2>Today</h2>
+          <p class="big" id="p-today"></p>
+          <p class="detail" id="p-today-cycles"></p>
+        </div>
+        <div class="card">
+          <h2>Streak</h2>
+          <p class="big" id="p-streak"></p>
+          <p class="detail">with a full cycle</p>
+        </div>
+      </div>
+      <div class="card">
+        <h2>Last 7 days</h2>
+        <p class="detail" id="p-week"></p>
+        <ol class="chart" id="p-chart"></ol>
+      </div>
+      <div class="card">
+        <h2>All time</h2>
+        <p class="big" id="p-all"></p>
+        <p class="detail" id="p-all-cycles"></p>
+      </div>
+      <p class="small center">
+        Your progress is stored only in this browser, on this device. Study Cycle never sends it
+        anywhere.
+      </p>
+      <p class="center">
+        <button class="text-btn" id="delete-progress" type="button"><svg><use href="#i-trash"/></svg><span>Delete my progress</span></button>
+      </p>
+    </section>
+
+    <!-- Settings -->
+    <section class="view" id="view-settings" aria-labelledby="sub-title" hidden>
+      <fieldset class="group">
+        <legend>Cycle length</legend>
+        <div id="presets"></div>
+        <div id="custom" hidden>
+          <label class="slider">
+            <span class="slider-head"><span>Focus</span><output id="focus-value"></output></span>
+            <input type="range" id="focus-range">
+          </label>
+          <label class="slider">
+            <span class="slider-head"><span>Break</span><output id="break-value"></output></span>
+            <input type="range" id="break-range">
+          </label>
+        </div>
+        <p class="small">A change applies from the next focus block or break.</p>
+      </fieldset>
+
+      <fieldset class="group">
+        <legend>Timer</legend>
+        <label class="switch-row">
+          <span>
+            <span class="row-title">Start the next focus block automatically</span>
+            <span class="row-sub">When a break ends. After 3 automatic starts in a row, Study Cycle
+              waits for you, so a forgotten timer stops counting.</span>
+          </span>
+          <input type="checkbox" class="switch" id="auto-start">
+        </label>
+        <label class="switch-row">
+          <span>
+            <span class="row-title">Keep the screen on</span>
+            <span class="row-sub" id="keep-screen-sub">While the timer runs and this tab is showing.</span>
+          </span>
+          <input type="checkbox" class="switch" id="keep-screen">
+        </label>
+      </fieldset>
+
+      <fieldset class="group">
+        <legend>Alerts</legend>
+        <label class="switch-row">
+          <span>
+            <span class="row-title">Play a sound</span>
+            <span class="row-sub">A short chime when a focus block or break ends.</span>
+          </span>
+          <input type="checkbox" class="switch" id="sound">
+        </label>
+        <div class="alert-row">
+          <p><span class="row-title" id="alert-status">Notifications</span>
+            <span class="row-sub" id="alert-detail"></span></p>
+          <button class="text-btn" id="alert-allow" type="button" hidden>Allow</button>
+        </div>
+        <p><button class="text-btn" id="alert-test" type="button">Test the alert</button></p>
+      </fieldset>
+    </section>
+
+    <!-- About -->
+    <section class="view prose" id="view-about" aria-labelledby="sub-title" hidden>
+      <h2>How it works</h2>
+      <p>Pick one task and focus on it until the timer ends. Then take a real break, away from your
+        screen. Repeat.</p>
+      <p>Study Cycle tells you when each focus block and break ends. In this web version that works
+        while this tab is open. The <a href="/">iPhone and Android app</a> also alerts you when your
+        phone is locked.</p>
+
+      <h2>Why 90 minutes?</h2>
+      <p>Sleep researcher Nathaniel Kleitman proposed that a roughly 90-minute "basic rest-activity
+        cycle" continues through the day as well as during sleep.</p>
+      <p>In a well-known study of expert violinists, the best players practiced in sessions of about
+        an hour to an hour and a half, with breaks in between, and rarely more than four hours a day.</p>
+      <p>A 2022 review of 22 study groups (2,335 people) found that short breaks give a small boost in
+        energy and reduce tiredness. Their effect on performance was clear only for less demanding
+        tasks.</p>
+      <p>There is no proof that exactly 90 minutes is best for everyone. Use it as a starting point,
+        and try the 50- or 25-minute cycles, or set your own.</p>
+      <h3>References</h3>
+      <ol class="refs">
+        <li>Kleitman, N. (1982). Basic rest-activity cycle—22 years later. <em>Sleep</em>, 5(4),
+          311–317. <a href="https://doi.org/10.1093/sleep/5.4.311">doi.org/10.1093/sleep/5.4.311</a></li>
+        <li>Ericsson, K. A., Krampe, R. T., &amp; Tesch-Römer, C. (1993). The role of deliberate
+          practice in the acquisition of expert performance. <em>Psychological Review</em>, 100(3),
+          363–406. <a href="https://doi.org/10.1037/0033-295X.100.3.363">doi.org/10.1037/0033-295X.100.3.363</a></li>
+        <li>Albulescu, P., et al. (2022). "Give me a break!" A systematic review and meta-analysis on
+          the efficacy of micro-breaks for increasing well-being and performance. <em>PLoS ONE</em>,
+          17(8), e0272460. <a href="https://doi.org/10.1371/journal.pone.0272460">doi.org/10.1371/journal.pone.0272460</a></li>
+      </ol>
+
+      <h2>Your privacy</h2>
+      <p>Study Cycle collects no data. There are no ads, accounts, cookies, analytics or trackers, and
+        this page loads nothing from other websites.</p>
+      <p>Your settings and progress are stored only in this browser, on this device. Clearing this
+        site's data in your browser deletes them, and so does "Delete my progress".</p>
+      <p>Full privacy policy: <a href="/privacy">studycycle.app/privacy</a></p>
+
+      <h2>Free and open source</h2>
+      <p>Study Cycle is free, with no paid upgrades. Its source code, including this web version, is
+        public under the GNU General Public License v3.0, so anyone can check what it does.</p>
+      <p>Source code: <a href="https://github.com/BitDevelopersLLC/StudyCycleApp">github.com/BitDevelopersLLC/StudyCycleApp</a><br>
+        Questions or problems: <a href="mailto:support@studycycle.app">support@studycycle.app</a></p>
+
+      <h2>Version</h2>
+      <p>Study Cycle for the web 1.0.0 · Made by BitDevelopers LLC</p>
+    </section>
+  </main>
+
+  <footer class="foot">
+    <a href="/">studycycle.app</a> · <a href="/privacy">Privacy</a> · <span>&copy; 2023&ndash;2026 BitDevelopers LLC</span>
+  </footer>
+
+  <dialog id="confirm-end" aria-labelledby="confirm-end-title">
+    <form method="dialog">
+      <h2 id="confirm-end-title">End this session?</h2>
+      <p>The focus time you have done so far is kept in your progress.</p>
+      <div class="dialog-actions">
+        <button class="text-btn" value="cancel" autofocus>Keep going</button>
+        <button class="text-btn" value="ok">End session</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog id="confirm-delete" aria-labelledby="confirm-delete-title">
+    <form method="dialog">
+      <h2 id="confirm-delete-title">Delete all progress?</h2>
+      <p>This removes every day of study history in this browser. It can't be undone.</p>
+      <div class="dialog-actions">
+        <button class="text-btn" value="cancel" autofocus>Cancel</button>
+        <button class="text-btn danger" value="ok">Delete</button>
+      </div>
+    </form>
+  </dialog>
+
+  <p class="sr-only" id="announcer" aria-live="polite"></p>
+</body>
+</html>

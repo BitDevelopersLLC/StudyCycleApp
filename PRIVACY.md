@@ -53,6 +53,16 @@ Like every website, our hosting provider's servers automatically record standard
 (IP address, browser type, the page requested, and the time). These logs are used only to keep the
 site running and secure. We don't use them to identify you or track you.
 
+## The web version
+
+The timer at [studycycle.app/app](https://studycycle.app/app/) runs entirely in your browser. Your
+settings and study totals are saved in your browser's own storage on your device ("local storage").
+They are never sent to us or anyone else: after the page has loaded, it makes no network requests,
+and the site's security policy blocks them. It uses no cookies.
+
+If you allow notifications, your browser shows them; no server is involved. "Delete my progress" or
+clearing this site's data in your browser deletes everything the web version stored.
+
 ## If you email us
 
 If you write to support@studycycle.app, we receive your email address and message. We use them

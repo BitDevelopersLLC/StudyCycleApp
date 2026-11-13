@@ -188,6 +188,20 @@ h3 {
   margin: 28px 0 12px;
 }
 
+.web-pill {
+  border-radius: 999px;
+  padding: 7px 18px;
+  background: #fff;
+  color: var(--blue);
+  font-size: 15px;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.web-pill:hover {
+  background: var(--tint);
+}
+
 .soon-pill {
   border: 1px solid rgba(255, 255, 255, 0.7);
   border-radius: 999px;

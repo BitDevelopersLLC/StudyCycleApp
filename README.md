@@ -79,6 +79,20 @@ Android release builds are signed with an upload key referenced from `mobile/and
 which is never committed. Building a Play bundle without it fails on purpose. To make your own
 copy, see [Sign the app](https://docs.flutter.dev/deployment/android#sign-the-app).
 
+### Web version
+
+`website/app/` is the same timer for the browser, at https://studycycle.app/app/. Plain JavaScript
+with no dependencies: `engine.js` is a direct port of the timer rules and study history in
+`mobile/lib/domain/`, and `app.js` is the page around it. It stores everything in the browser's
+`localStorage` and makes no network requests (the site's Content-Security-Policy for `/app/` sets
+`connect-src 'none'`). Test the engine with Node 20 or newer:
+
+```bash
+node --test tools/web-test/engine.test.mjs
+```
+
+When you change a rule in `mobile/lib/domain/`, change `website/app/engine.js` and its tests too.
+
 ### Store screenshots
 
 `tools/screenshot_data.py` puts made-up sample data (two weeks of study sessions) into a debug build
