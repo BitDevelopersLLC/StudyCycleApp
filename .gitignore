@@ -1,39 +1,33 @@
-# Build results
-[Dd]ebug/
-[Rr]elease/
-x64/
-x86/
-[Bb]in/
-[Oo]bj/
-[Ll]og/
-[Ll]ogs/
+# Private working notes, kept out of the public repository.
+.claude/
+CLAUDE.md
+ClaudeLog.md
+# Store listings and release walkthroughs.
+docs/
 
-# Visual Studio
-.vs/
-*.suo
-*.user
-*.userosscache
-*.sln.docstates
+# Brand assets (logo, icons, screenshots, store graphics) are not part of the open-source release.
+media/
+website/assets/img/
 
-# NuGet
-packages/
-*.nupkg
-**/[Pp]ackages/*
+# Release signing. The upload keystore lives outside the repository; never commit either.
+*.jks
+*.keystore
+key.properties
 
-# Xamarin
-*.apk
-*.aab
-*.ipa
-*.dSYM.zip
-*.app
-
-# OS
+# Archives and OS files
+*.zip
 .DS_Store
 Thumbs.db
 
-# IDE
-*.swp
-*.swo
+# Old Xamarin build output that may still be on disk
+StudyCycleApp/
+.vs/
 
-# macOS
-*.xcuserstate
+# App icons generated from the private media/ files by `dart run flutter_launcher_icons`.
+# The repository keeps Flutter's default icons; the real ones stay local.
+mobile/android/app/src/main/res/drawable-*/ic_launcher_*.png
+mobile/android/app/src/main/res/mipmap-anydpi-v26/
+mobile/android/app/src/main/res/values/colors.xml
+mobile/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-50x50@*.png
+mobile/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-57x57@*.png
+mobile/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-72x72@*.png
