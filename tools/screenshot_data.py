@@ -139,9 +139,10 @@ def ios(scene: str) -> None:
         current[f"flutter.{key}"] = value
     plist.parent.mkdir(parents=True, exist_ok=True)
     plist.write_bytes(plistlib.dumps(current, fmt=plistlib.FMT_BINARY))
-    # The Simulator's preferences daemon caches values; make it reread the file.
-    subprocess.run(["xcrun", "simctl", "spawn", "booted", "killall", "-HUP", "cfprefsd"],
-                   check=False, capture_output=True)
+    # The Simulator's preferences daemon caches values and the runtime has no killall, so stop it
+    # through the Simulator's launchd (which restarts it) to make it reread the file.
+    subprocess.run(["xcrun", "simctl", "spawn", "booted", "launchctl", "kill", "TERM",
+                    "system/com.apple.cfprefsd.xpc.daemon"], check=True, capture_output=True)
     print(f"ios: wrote the {scene} scene for {today} to {plist}")
 
 
