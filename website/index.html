@@ -1,0 +1,517 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Study Cycle: Free Study Timer for Focus and Breaks</title>
+  <meta name="description" content="Study Cycle is a free study timer for iPhone and Android. Focus for 90 minutes, then take a real break, or choose 50, 25 or your own lengths. No ads, no account, nothing collected.">
+  <link rel="canonical" href="https://studycycle.app/">
+  <meta name="theme-color" content="#1f6fa8">
+
+  <!-- Link previews in messages and social media -->
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Study Cycle">
+  <meta property="og:locale" content="en_US">
+  <meta property="og:url" content="https://studycycle.app/">
+  <meta property="og:title" content="Study Cycle: a free study timer">
+  <meta property="og:description" content="Focus on one task, then take a real break. 90-minute cycles by default, or 50, 25 or your own. Free, no ads, nothing collected. Coming soon to the App Store and Google Play.">
+  <meta property="og:image" content="https://studycycle.app/assets/img/social-card.png?v=1">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Study Cycle: a free study timer. Focus, then take a real break.">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Study Cycle: a free study timer">
+  <meta name="twitter:description" content="Focus on one task, then take a real break. 90-minute cycles by default, or 50, 25 or your own. Free, no ads, nothing collected.">
+  <meta name="twitter:image" content="https://studycycle.app/assets/img/social-card.png?v=1">
+
+  <link rel="icon" href="assets/img/favicon.ico?v=1" sizes="any">
+  <link rel="icon" href="assets/img/favicon-32.png?v=1" type="image/png" sizes="32x32">
+  <link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png?v=1">
+  <link rel="stylesheet" href="assets/css/style.css?v=1">
+  <!-- Structured data for search engines. It is data, not code, so the strict CSP allows it.
+       The FAQPage answers must match the questions in the #support section. Keep them in sync. -->
+  <script type="application/ld+json">
+[
+  {
+    "@context": "https://schema.org",
+    "@type": "MobileApplication",
+    "name": "Study Cycle",
+    "url": "https://studycycle.app/",
+    "description": "Study Cycle is a free study timer. Focus on one task for 90 minutes, then take a 20-minute break, or choose Classic (50 / 10), Short (25 / 5) or your own lengths. It alerts you when each focus block or break ends, even when your phone is locked, and keeps your progress (today, the last 7 days and your streak) only on your phone. No ads, no account, and no data collected.",
+    "applicationCategory": "EducationalApplication",
+    "operatingSystem": "iOS 15 or later, Android 7.0 or later",
+    "inLanguage": "en",
+    "isAccessibleForFree": true,
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    },
+    "image": "https://studycycle.app/assets/img/icon-512.png",
+    "screenshot": [
+      "https://studycycle.app/assets/img/screen-focus.png?v=1",
+      "https://studycycle.app/assets/img/screen-break.png?v=1",
+      "https://studycycle.app/assets/img/screen-progress.png?v=1",
+      "https://studycycle.app/assets/img/screen-settings.png?v=1"
+    ],
+    "publisher": {
+      "@type": "Organization",
+      "name": "BitDevelopers LLC",
+      "url": "https://bitdevelopers.com"
+    },
+    "license": "https://www.gnu.org/licenses/gpl-3.0.html"
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "Study Cycle",
+    "url": "https://studycycle.app/",
+    "publisher": {
+      "@type": "Organization",
+      "name": "BitDevelopers LLC",
+      "url": "https://bitdevelopers.com",
+      "email": "support@studycycle.app",
+      "logo": "https://studycycle.app/assets/img/icon-512.png"
+    }
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "My alerts arrive late on Android. How do I fix that?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "On Android 14 and later, you choose whether Study Cycle may use Alarms & reminders. Without it, alerts can arrive late while your phone is idle. If the app shows \"Alerts may arrive late\", tap Allow and turn on Alarms & reminders for Study Cycle. You can also search your phone's Settings for Alarms & reminders. Some phones also pause apps to save battery. If alerts are still late, go to Settings > Apps > Study Cycle > Battery and choose Unrestricted (the name varies by phone)."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "I don't get any alerts. Are notifications turned off?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Study Cycle needs permission to show notifications, and your phone asks you first. If notifications are off, the app tells you on its main screen. To turn them on: iPhone: open Settings > Notifications > Study Cycle and turn on Allow Notifications. Android: open Settings > Apps > Study Cycle > Notifications and turn them on. Also check that your phone isn't muted."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Will I get alerts with Do Not Disturb or a Focus turned on?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Do Not Disturb on Android and Focus modes on iPhone can silence or hide notifications, including Study Cycle's. To get its alerts while you study, allow Study Cycle as an exception. iPhone: go to Settings > Focus, pick the Focus you use, tap Apps, and add Study Cycle. Android: search your phone's Settings for Do Not Disturb and add Study Cycle to the apps that can interrupt (the steps vary by phone)."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Does the timer keep going if I close the app or my phone restarts?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes. Study Cycle saves the time when the current focus block or break ends, so it shows the right time whenever you open it again, even after a restart. Its alerts are scheduled on your phone ahead of time, so they arrive while your phone is locked."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Where is my progress stored? Can I back it up or delete it?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Your settings and study totals are stored only on your phone. There's no account, so nothing syncs between devices. To delete your study totals, open Progress and tap Delete my progress. Uninstalling the app deletes everything. On iPhone, your data may be included in your own device backup if you have turned that on. Android app backup is turned off for Study Cycle."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Which phones does it work on?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "iPhone with iOS 15 or later, and Android phones with Android 7.0 or later."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How much does it cost?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Nothing. Study Cycle is free, with no ads, no subscription and no paid upgrades."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Where can I download it?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Study Cycle is coming soon to the App Store and Google Play. Links will appear on this page when it's available."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Does the app collect any data?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "No. There's no account, no ads, no analytics and no tracking. The Android app doesn't even have permission to use the internet. The privacy policy lists every permission and what it's for."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How do I contact you or report a problem?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Email support@studycycle.app. It helps to include your phone model and its software version, for example \"Pixel 8, Android 15\" or \"iPhone 13, iOS 18\". We read every message."
+        }
+      }
+    ]
+  }
+]
+  </script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="site-header">
+    <div class="container">
+      <a class="brand" href="./">
+        <img src="assets/img/apple-touch-icon.png?v=1" alt="" width="40" height="40">
+        Study Cycle
+      </a>
+      <nav class="site-nav" aria-label="Main">
+        <a class="nav-optional" href="#features">Features</a>
+        <a href="#how">How it works</a>
+        <a class="nav-optional" href="#why">Why 90?</a>
+        <a href="#support">Support</a>
+        <a href="/privacy">Privacy</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="container">
+        <div>
+          <h1 id="hero-title">Focus in cycles. Take real breaks.</h1>
+          <p>
+            Study Cycle is a free study timer. Focus on one task for 90 minutes, then take a
+            20-minute break away from your screen. Prefer shorter? Switch to 50 or 25 minutes,
+            or set your own.
+          </p>
+          <div class="get-app">
+            <!-- When the app is live, replace these pills with the official
+                 "Download on the App Store" and "Get it on Google Play" badges,
+                 linked to the store listings. -->
+            <span class="soon-pill">Coming soon to the App Store</span>
+            <span class="soon-pill">Coming soon to Google Play</span>
+          </div>
+          <p class="notify">
+            Free. No ads, no account, nothing collected. Questions?
+            <a href="mailto:support@studycycle.app">support@studycycle.app</a>
+          </p>
+        </div>
+        <img class="phone-shot hero-phone" src="assets/img/screen-focus.png?v=1" width="1080" height="2400"
+             alt="The Study Cycle timer during a 90-minute focus block, with Pause, Start break now and End session buttons.">
+      </div>
+    </section>
+
+    <section class="after-hero" id="features" aria-labelledby="features-title">
+      <div class="container">
+        <div class="section-title">
+          <h2 id="features-title">What it does</h2>
+          <p>A simple timer that helps you study in focused blocks and actually rest between them.</p>
+        </div>
+        <div class="cards">
+          <div class="card">
+            <h3>Focus and break timer</h3>
+            <p>Deep focus (90 minutes, then a 20-minute break) is the default. Or pick Classic (50 / 10),
+              Short (25 / 5) or Custom: 5 to 180 minutes of focus and 1 to 60 minutes of break.</p>
+          </div>
+          <div class="card">
+            <h3>Alerts when time's up</h3>
+            <p>Study Cycle tells you when each focus block or break ends, even when your phone is locked.</p>
+          </div>
+          <div class="card">
+            <h3>Keeps the right time</h3>
+            <p>The timer stays correct if you close the app or your phone restarts during a session.</p>
+          </div>
+          <div class="card">
+            <h3>Break ideas</h3>
+            <p>Each break suggests something away from the screen: stretch, drink some water, rest your
+              eyes, or take a short walk.</p>
+          </div>
+          <div class="card">
+            <h3>Your progress</h3>
+            <p>Today's focus time, a 7-day chart, your streak and all-time totals. Stored only on your
+              phone, and you can delete it anytime.</p>
+          </div>
+          <div class="card">
+            <h3>Works your way</h3>
+            <p>Pause, resume or skip to the break anytime. Optionally start the next focus block
+              automatically (it waits for you after 3 in a row) or keep the screen on.</p>
+          </div>
+          <div class="card">
+            <h3>Easy to read</h3>
+            <p>Light and dark mode, screen reader labels, and text that grows with your phone's font size.</p>
+          </div>
+          <div class="card">
+            <h3>Free and open source</h3>
+            <p>No price, no subscription, no ads. The code is public, so anyone can check what it does.</p>
+          </div>
+        </div>
+
+        <!-- Stand-in screenshots for now. Replace the files (same names, 1080x2400) and bump ?v=. -->
+        <h3 class="gallery-title">See it on your phone</h3>
+        <div class="gallery">
+          <figure>
+            <img class="phone-shot" src="assets/img/screen-break.png?v=1" width="1080" height="2400" loading="lazy"
+                 alt="The timer during a break, with an idea for what to do away from the screen.">
+            <figcaption>Break time</figcaption>
+          </figure>
+          <figure>
+            <img class="phone-shot" src="assets/img/screen-progress.png?v=1" width="1080" height="2400" loading="lazy"
+                 alt="The Progress screen with today's focus time, the last 7 days, the streak and all-time totals.">
+            <figcaption>Your progress</figcaption>
+          </figure>
+          <figure>
+            <img class="phone-shot" src="assets/img/screen-settings.png?v=1" width="1080" height="2400" loading="lazy"
+                 alt="Settings with the cycle lengths Deep focus, Classic, Short and Custom, and the timer options.">
+            <figcaption>Cycle lengths and options</figcaption>
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <section class="tinted" id="how" aria-labelledby="how-title">
+      <div class="container">
+        <div class="section-title">
+          <h2 id="how-title">How it works</h2>
+          <p>Three steps, repeated as many times as you like.</p>
+        </div>
+        <ol class="steps">
+          <li>
+            <h3>Pick a cycle</h3>
+            <p>Start with Deep focus (90 minutes of focus, then 20 minutes of rest), or choose Classic,
+              Short or your own lengths.</p>
+          </li>
+          <li>
+            <h3>Focus on one task</h3>
+            <p>Tap Start focus and stay with one thing. Notes and questions can wait for the break.
+              Study Cycle tells you when the time is up.</p>
+          </li>
+          <li>
+            <h3>Take a real break</h3>
+            <p>Step away from your screen and try the break idea. When the break ends, start the next
+              cycle, or let it start by itself.</p>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <section id="why" aria-labelledby="why-title">
+      <div class="container narrow">
+        <div class="section-title">
+          <h2 id="why-title">Why 90 minutes?</h2>
+          <p>A starting point with research behind it, not a rule.</p>
+        </div>
+        <p>
+          Sleep researcher Nathaniel Kleitman proposed that a roughly 90-minute "basic rest-activity
+          cycle" continues through the day as well as during sleep.
+        </p>
+        <p>
+          In a well-known study of expert violinists, the best players practiced in sessions of about an
+          hour to an hour and a half, with breaks in between, and rarely more than four hours a day.
+        </p>
+        <p>
+          A 2022 review of 22 studies found that short breaks reliably reduce tiredness and can help
+          performance.
+        </p>
+        <p class="honest">
+          There is no proof that exactly 90 minutes is best for everyone. Use it as a starting point,
+          and try the 50- or 25-minute cycles, or set your own.
+        </p>
+        <div class="references">
+          <h3>References</h3>
+          <ol>
+            <li>Kleitman, N. (1982). Basic rest-activity cycle&mdash;22 years later. <cite>Sleep</cite>, 5(4),
+              311&ndash;317. <a href="https://doi.org/10.1093/sleep/5.4.311">doi.org/10.1093/sleep/5.4.311</a></li>
+            <li>Ericsson, K. A., Krampe, R. T., &amp; Tesch-R&ouml;mer, C. (1993). The role of deliberate
+              practice in the acquisition of expert performance. <cite>Psychological Review</cite>, 100(3),
+              363&ndash;406. <a href="https://doi.org/10.1037/0033-295X.100.3.363">doi.org/10.1037/0033-295X.100.3.363</a></li>
+            <li>Albulescu, P., et al. (2022). "Give me a break!" A systematic review and meta-analysis on
+              the efficacy of micro-breaks for increasing well-being and performance. <cite>PLoS ONE</cite>,
+              17(8), e0272460. <a href="https://doi.org/10.1371/journal.pone.0272460">doi.org/10.1371/journal.pone.0272460</a></li>
+          </ol>
+        </div>
+      </div>
+    </section>
+
+    <section class="tinted" id="privacy" aria-labelledby="privacy-title">
+      <div class="container">
+        <div class="section-title">
+          <h2 id="privacy-title">Your privacy</h2>
+          <p>Study Cycle collects no data. None.</p>
+        </div>
+        <div class="cards">
+          <div class="card">
+            <h3>No account, no ads</h3>
+            <p>Nothing to sign up for, and nothing competing for your attention.</p>
+          </div>
+          <div class="card">
+            <h3>No tracking</h3>
+            <p>No analytics, no advertising, no crash reports.</p>
+          </div>
+          <div class="card">
+            <h3>Stays on your phone</h3>
+            <p>Your settings and progress are stored only on your phone. Uninstalling the app deletes them.</p>
+          </div>
+          <div class="card">
+            <h3>No internet on Android</h3>
+            <p>The Android app doesn't have permission to use the internet, so it can't send anything.</p>
+          </div>
+          <div class="card">
+            <h3>Open source</h3>
+            <p>Anyone can check these promises.
+              <a href="https://github.com/BitDevelopersLLC/StudyCycleApp">Read the code</a>.</p>
+          </div>
+        </div>
+        <p class="more-link"><a href="/privacy">Read the full privacy policy</a></p>
+      </div>
+    </section>
+
+    <section id="support" aria-labelledby="support-title">
+      <div class="container narrow faq">
+        <div class="section-title">
+          <h2 id="support-title">Support and questions</h2>
+          <p>Most answers are below. If not, just write to us.</p>
+        </div>
+        <p class="contact-box">
+          Email <a href="mailto:support@studycycle.app">support@studycycle.app</a>. It helps to include
+          your phone model and its software version.
+        </p>
+
+        <h3>Alerts</h3>
+
+        <details>
+          <summary>My alerts arrive late on Android. How do I fix that?</summary>
+          <p>
+            On Android 14 and later, you choose whether Study Cycle may use
+            <strong>Alarms &amp; reminders</strong>. Without it, alerts can arrive late while your phone
+            is idle.
+          </p>
+          <ul>
+            <li>If the app shows "Alerts may arrive late", tap <strong>Allow</strong> and turn on
+              <strong>Alarms &amp; reminders</strong> for Study Cycle.</li>
+            <li>You can also search your phone's Settings for <strong>Alarms &amp; reminders</strong>.</li>
+          </ul>
+          <p>
+            Some phones also pause apps to save battery. If alerts are still late, go to
+            <strong>Settings &gt; Apps &gt; Study Cycle &gt; Battery</strong> and choose
+            <strong>Unrestricted</strong> (the name varies by phone).
+          </p>
+        </details>
+
+        <details>
+          <summary>I don't get any alerts. Are notifications turned off?</summary>
+          <p>
+            Study Cycle needs permission to show notifications, and your phone asks you first. If
+            notifications are off, the app tells you on its main screen. To turn them on:
+          </p>
+          <ul>
+            <li><strong>iPhone:</strong> open <strong>Settings &gt; Notifications &gt; Study Cycle</strong>
+              and turn on <strong>Allow Notifications</strong>.</li>
+            <li><strong>Android:</strong> open <strong>Settings &gt; Apps &gt; Study Cycle &gt;
+              Notifications</strong> and turn them on.</li>
+          </ul>
+          <p>Also check that your phone isn't muted.</p>
+        </details>
+
+        <details>
+          <summary>Will I get alerts with Do Not Disturb or a Focus turned on?</summary>
+          <p>
+            Do Not Disturb on Android and Focus modes on iPhone can silence or hide notifications,
+            including Study Cycle's. To get its alerts while you study, allow Study Cycle as an exception.
+          </p>
+          <ul>
+            <li><strong>iPhone:</strong> go to <strong>Settings &gt; Focus</strong>, pick the Focus you use,
+              tap <strong>Apps</strong>, and add Study Cycle.</li>
+            <li><strong>Android:</strong> search your phone's Settings for <strong>Do Not Disturb</strong>
+              and add Study Cycle to the apps that can interrupt (the steps vary by phone).</li>
+          </ul>
+        </details>
+
+        <details>
+          <summary>Does the timer keep going if I close the app or my phone restarts?</summary>
+          <p>
+            Yes. Study Cycle saves the time when the current focus block or break ends, so it shows the
+            right time whenever you open it again, even after a restart. Its alerts are scheduled on your
+            phone ahead of time, so they arrive while your phone is locked.
+          </p>
+        </details>
+
+        <h3>Your data</h3>
+
+        <details>
+          <summary>Where is my progress stored? Can I back it up or delete it?</summary>
+          <p>
+            Your settings and study totals are stored only on your phone. There's no account, so nothing
+            syncs between devices.
+          </p>
+          <ul>
+            <li>To delete your study totals, open <strong>Progress</strong> and tap
+              <strong>Delete my progress</strong>.</li>
+            <li>Uninstalling the app deletes everything.</li>
+            <li>On iPhone, your data may be included in your own device backup if you have turned that on.
+              Android app backup is turned off for Study Cycle.</li>
+          </ul>
+        </details>
+
+        <details>
+          <summary>Does the app collect any data?</summary>
+          <p>
+            No. There's no account, no ads, no analytics and no tracking. The Android app doesn't even
+            have permission to use the internet. The <a href="/privacy">privacy policy</a> lists every
+            permission and what it's for.
+          </p>
+        </details>
+
+        <h3>About the app</h3>
+
+        <details>
+          <summary>Which phones does it work on?</summary>
+          <p>iPhone with iOS 15 or later, and Android phones with Android 7.0 or later.</p>
+        </details>
+
+        <details>
+          <summary>How much does it cost?</summary>
+          <p>Nothing. Study Cycle is free, with no ads, no subscription and no paid upgrades.</p>
+        </details>
+
+        <details>
+          <summary>Where can I download it?</summary>
+          <p>
+            Study Cycle is coming soon to the App Store and Google Play. Links will appear on this page
+            when it's available.
+          </p>
+        </details>
+
+        <details>
+          <summary>How do I contact you or report a problem?</summary>
+          <p>
+            Email <a href="mailto:support@studycycle.app">support@studycycle.app</a>. It helps to include
+            your phone model and its software version, for example "Pixel 8, Android 15" or
+            "iPhone 13, iOS 18". We read every message.
+          </p>
+        </details>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <span>&copy; 2026 BitDevelopers LLC</span>
+      <nav aria-label="Footer">
+        <a href="#support">Support</a>
+        <a href="/privacy">Privacy policy</a>
+        <a href="https://github.com/BitDevelopersLLC/StudyCycleApp">Source code</a>
+        <a href="mailto:support@studycycle.app">support@studycycle.app</a>
+      </nav>
+      <p class="small">This website uses no cookies, analytics, or trackers.</p>
+    </div>
+  </footer>
+</body>
+</html>

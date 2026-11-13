@@ -1,0 +1,632 @@
+/* Study Cycle website. No external fonts, scripts, cookies, or trackers. */
+
+:root {
+  --green: #2f7a4a;        /* focus green, dark enough for white text (5.2:1) */
+  --green-bright: #5db075; /* focus green from the app, decoration only */
+  --blue: #1f6fa8;         /* rest blue, dark enough for white text (5.4:1) */
+  --blue-bright: #3e92cc;  /* rest blue from the app, decoration only */
+  --orange: #ffa279;       /* paused orange, only behind dark text */
+  --ink: #16242e;
+  --muted: #4a5a66;
+  --paper: #f7f9fc;
+  --tint: #eaf3ef;
+  --card: #ffffff;
+  --line: #dde6ec;
+  --night: #13222c;
+  --sans: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --radius: 18px;
+  --max: 1100px;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  overflow-x: hidden; /* safety net: nothing should ever cause sideways scrolling */
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  background: var(--paper);
+  color: var(--ink);
+  font: 17px/1.6 var(--sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+a {
+  color: var(--blue);
+  overflow-wrap: anywhere; /* long email addresses and URLs wrap on small screens */
+}
+
+p,
+li,
+td {
+  overflow-wrap: break-word;
+}
+
+code {
+  overflow-wrap: anywhere; /* fallback; the HTML also allows breaks after underscores */
+}
+
+h1,
+h2,
+h3 {
+  line-height: 1.2;
+  margin: 0 0 0.5em;
+  letter-spacing: -0.01em;
+}
+
+:focus-visible {
+  outline: 3px solid var(--blue);
+  outline-offset: 3px;
+}
+
+.container {
+  width: min(100% - 32px, var(--max));
+  margin-inline: auto;
+}
+
+.skip-link {
+  position: absolute;
+  left: -999px;
+}
+
+.skip-link:focus {
+  left: 16px;
+  top: 16px;
+  background: #fff;
+  color: var(--ink);
+  padding: 8px 12px;
+  z-index: 10;
+}
+
+/* Header */
+
+.site-header {
+  position: absolute;
+  inset: 0 0 auto;
+  z-index: 2;
+}
+
+.site-header .container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding-block: 20px;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: #fff;
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 22px;
+  white-space: nowrap;
+}
+
+.brand img {
+  width: 40px;
+  border-radius: 10px;
+}
+
+.site-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 24px;
+}
+
+.site-nav a {
+  color: #fff;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.site-nav a:hover,
+.site-nav a[aria-current="page"] {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+/* White focus rings on the dark blue/green backgrounds */
+.site-header :focus-visible,
+.hero :focus-visible,
+.site-footer :focus-visible {
+  outline-color: #fff;
+}
+
+/* Pages with a solid header (privacy, 404) */
+
+.site-header.light {
+  position: static;
+  background: linear-gradient(90deg, var(--blue), var(--green));
+}
+
+/* Hero */
+
+.hero {
+  background: linear-gradient(140deg, var(--blue) 0%, var(--green) 100%);
+  color: #fff;
+  padding: 120px 0 0;
+  overflow: hidden;
+}
+
+.hero .container {
+  display: grid;
+  gap: 40px;
+  align-items: center;
+}
+
+.hero h1 {
+  font-size: clamp(34px, 6vw, 56px);
+}
+
+.hero p {
+  font-size: 19px;
+  max-width: 34em;
+}
+
+.get-app {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px 14px;
+  margin: 28px 0 12px;
+}
+
+.soon-pill {
+  border: 1px solid rgba(255, 255, 255, 0.7);
+  border-radius: 999px;
+  padding: 6px 16px;
+  font-size: 15px;
+  font-weight: 500;
+}
+
+.hero .notify {
+  font-size: 16px;
+}
+
+.hero .notify a {
+  color: #fff;
+  font-weight: 600;
+}
+
+.phone-shot {
+  border: 6px solid var(--night);
+  border-radius: 30px;
+  background: var(--night);
+}
+
+.hero-phone {
+  justify-self: center;
+  width: min(300px, 70vw);
+  margin-bottom: -60px;
+  box-shadow: 0 24px 48px rgba(0, 0, 0, 0.35);
+}
+
+/* Sections */
+
+section {
+  padding: 96px 0;
+}
+
+.after-hero {
+  padding-top: 140px;
+}
+
+.tinted {
+  background: var(--tint);
+}
+
+.section-title {
+  text-align: center;
+  margin-bottom: 48px;
+}
+
+.section-title h2 {
+  font-size: clamp(28px, 4vw, 40px);
+}
+
+.section-title p {
+  color: var(--muted);
+  max-width: 36em;
+  margin: 0 auto;
+}
+
+.cards {
+  display: grid;
+  gap: 20px;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+}
+
+.card {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-top: 4px solid var(--green-bright);
+  border-radius: var(--radius);
+  padding: 24px;
+}
+
+.card:nth-child(3n + 2) {
+  border-top-color: var(--blue-bright);
+}
+
+.card:nth-child(3n) {
+  border-top-color: var(--orange);
+}
+
+.card h3 {
+  font-size: 20px;
+}
+
+.card p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 16px;
+}
+
+.more-link {
+  text-align: center;
+  margin: 32px 0 0;
+  font-weight: 600;
+}
+
+/* Screenshots */
+
+.gallery-title {
+  text-align: center;
+  font-size: 24px;
+  margin: 64px 0 20px;
+}
+
+.gallery {
+  display: flex;
+  gap: 24px;
+  overflow-x: auto;
+  padding: 8px 4px 24px;
+  scroll-snap-type: x mandatory;
+}
+
+.gallery figure {
+  flex: 0 0 auto;
+  margin: 0 auto;
+  scroll-snap-align: center;
+  text-align: center;
+}
+
+.gallery img {
+  width: 220px;
+  border-width: 5px;
+  border-radius: 26px;
+}
+
+.gallery figcaption {
+  margin-top: 10px;
+  font-size: 15px;
+  color: var(--muted);
+}
+
+/* How it works: three numbered steps */
+
+.steps {
+  list-style: none;
+  counter-reset: step;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 20px;
+}
+
+.steps li {
+  counter-increment: step;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 24px;
+}
+
+.steps li::before {
+  content: counter(step);
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  margin-bottom: 14px;
+  border-radius: 50%;
+  background: var(--orange);
+  color: var(--ink);
+  font-weight: 700;
+  font-size: 19px;
+}
+
+.steps h3 {
+  font-size: 20px;
+}
+
+.steps p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 16px;
+}
+
+/* Why 90 minutes? */
+
+.narrow {
+  max-width: 760px;
+}
+
+.honest {
+  background: var(--card);
+  border-left: 5px solid var(--orange);
+  border-radius: 0 12px 12px 0;
+  padding: 16px 20px;
+  font-weight: 600;
+}
+
+.references {
+  margin-top: 32px;
+  font-size: 15px;
+  color: var(--muted);
+}
+
+.references h3 {
+  font-size: 18px;
+  color: var(--ink);
+}
+
+.references ol {
+  padding-left: 1.4em;
+  margin: 0;
+}
+
+.references li + li {
+  margin-top: 10px;
+}
+
+/* FAQ and support: expandable questions (no JavaScript) */
+
+.contact-box {
+  background: var(--tint);
+  border-radius: 12px;
+  padding: 14px 18px;
+}
+
+.faq h3 {
+  font-size: 22px;
+  margin-top: 1.6em;
+}
+
+details {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  margin: 10px 0;
+  padding: 0 18px;
+}
+
+details[open] {
+  padding-bottom: 6px;
+}
+
+summary {
+  cursor: pointer;
+  padding: 14px 0;
+  font-weight: 600;
+  list-style: none;
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+summary::-webkit-details-marker {
+  display: none;
+}
+
+summary::after {
+  content: "+";
+  flex: none;
+  font-weight: 400;
+  font-size: 22px;
+  line-height: 1;
+  color: var(--blue);
+}
+
+details[open] summary::after {
+  content: "\2212"; /* minus sign */
+}
+
+summary:focus-visible {
+  outline-offset: 4px;
+}
+
+details p {
+  margin: 0 0 12px;
+}
+
+details ol,
+details ul {
+  padding-left: 1.3em;
+  margin: 0 0 12px;
+}
+
+details li + li {
+  margin-top: 6px;
+}
+
+/* Prose pages (privacy, 404) */
+
+.prose {
+  max-width: 760px;
+  padding-block: 56px 80px;
+}
+
+.prose h1 {
+  font-size: 40px;
+}
+
+.prose h2 {
+  font-size: 24px;
+  margin-top: 1.6em;
+}
+
+.prose table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 12px 0 20px;
+  font-size: 16px;
+}
+
+.prose th,
+.prose td {
+  text-align: left;
+  vertical-align: top;
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--line);
+}
+
+.prose code {
+  font-size: 14px;
+  background: #e8eef3;
+  padding: 2px 6px;
+  border-radius: 6px;
+}
+
+.lead {
+  font-size: 21px;
+  font-weight: 600;
+}
+
+/* Footer */
+
+.site-footer {
+  background: var(--night);
+  color: #c9d6df;
+  padding: 40px 0;
+  font-size: 15px;
+}
+
+.site-footer .container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px 32px;
+  justify-content: space-between;
+}
+
+.site-footer a {
+  color: #fff;
+}
+
+.site-footer nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 20px;
+}
+
+.site-footer .small {
+  width: 100%;
+  margin: 0;
+  font-size: 13px;
+}
+
+/* Larger screens */
+
+@media (min-width: 860px) {
+  .hero .container {
+    grid-template-columns: 1.15fr 0.85fr;
+  }
+
+  .steps {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* Phones */
+
+@media (max-width: 600px) {
+  /* Menu moves to its own row under the logo instead of disappearing. */
+  .site-header .container {
+    flex-wrap: wrap;
+    row-gap: 10px;
+    padding-block: 14px;
+  }
+
+  .site-nav {
+    width: 100%;
+    gap: 0 22px;
+  }
+
+  .site-nav a {
+    font-size: 15px;
+    padding-block: 6px; /* comfortable tap targets */
+  }
+
+  .hero {
+    padding-top: 156px;
+  }
+
+  .hero p {
+    font-size: 17px;
+  }
+
+  section {
+    padding: 64px 0;
+  }
+
+  .after-hero {
+    padding-top: 110px;
+  }
+
+  .card,
+  .steps li {
+    padding: 20px;
+  }
+
+  .gallery img {
+    width: 180px;
+  }
+
+  .prose {
+    padding-block: 36px 64px;
+  }
+
+  .prose h1 {
+    font-size: 32px;
+  }
+
+  .prose th,
+  .prose td {
+    padding: 8px 6px;
+  }
+}
+
+/* Small phones: keep the menu on one row */
+
+@media (max-width: 480px) {
+  .nav-optional {
+    display: none;
+  }
+
+  .prose code {
+    font-size: 12px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
