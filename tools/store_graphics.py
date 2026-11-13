@@ -4,7 +4,7 @@
 Usage:
     python tools/store_graphics.py icons     app icon sources + Android notification icon, from the logo
     python tools/store_graphics.py android   Google Play: framed screenshots, feature graphic, icon
-    python tools/store_graphics.py iphone    App Store: framed iPhone 6.9" screenshots, icon
+    python tools/store_graphics.py iphone    App Store: framed iPhone 6.9" and 6.3" screenshots, icon
     python tools/store_graphics.py ipad      App Store: framed iPad 13" screenshots
     python tools/store_graphics.py website   studycycle.app: phone images, social card, favicons
     python tools/store_graphics.py all       all of the above (skips raw shots that don't exist)
@@ -143,6 +143,22 @@ def frame_set(platform: str) -> None:
         target = out_dir / f"{name}.png"
         canvas.convert("RGB").save(target, optimize=True)
         print(f"  {target.relative_to(ROOT)}  {canvas.size[0]}x{canvas.size[1]}")
+        if platform == "iphone":
+            save_medium_iphone(canvas, name)
+
+
+#: App Store Connect (2026) requires the iPhone "medium display" set (6.1"/6.3"); 6.9" is optional.
+#: 1206 x 2622 has the same aspect as 1320 x 2868 to within 0.1%, so the 6.9" frame is resized.
+IPHONE_MEDIUM_SIZE = (1206, 2622)
+IPHONE_MEDIUM_DIR = STORE / "app-store" / "iphone-6.3"
+
+
+def save_medium_iphone(canvas: Image.Image, name: str) -> None:
+    """Saves a framed 6.9" shot again at the required 6.3" iPhone size."""
+    IPHONE_MEDIUM_DIR.mkdir(parents=True, exist_ok=True)
+    target = IPHONE_MEDIUM_DIR / f"{name}.png"
+    canvas.convert("RGB").resize(IPHONE_MEDIUM_SIZE, Image.LANCZOS).save(target, optimize=True)
+    print(f"  {target.relative_to(ROOT)}  {IPHONE_MEDIUM_SIZE[0]}x{IPHONE_MEDIUM_SIZE[1]}")
 
 
 LOGO = MEDIA / "brand" / "Study-Cycle-Logo-2000x2000.png"
