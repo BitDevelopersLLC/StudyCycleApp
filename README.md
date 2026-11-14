@@ -60,6 +60,8 @@ mobile/                         Flutter app (Android + iOS)
   ios/Runner/AppDelegate.swift  Keep-screen-on channel and foreground alerts
   test/                         Unit, controller and widget tests
 website/                        studycycle.app (static HTML/CSS, no scripts or trackers)
+  app/                          The browser version of the timer
+tools/                          Screenshot and store-image scripts, web engine tests
 ```
 
 The app's name and logo, the screenshots and the website images are brand assets. They are kept
@@ -116,6 +118,12 @@ aapt dump permissions build/app/outputs/flutter-apk/app-release.apk
 
 See [PRIVACY.md](PRIVACY.md) for every permission and what it's for, and [SECURITY.md](SECURITY.md)
 to report a problem.
+
+## Contributing
+
+Ideas, bug reports and pull requests are welcome. [CONTRIBUTING.md](CONTRIBUTING.md) explains the
+privacy and honesty rules every change must keep, where code goes, how to add a feature, and the
+checks to run. Release notes are in [CHANGELOG.md](CHANGELOG.md).
 
 ## License
 

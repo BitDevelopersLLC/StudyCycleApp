@@ -4,7 +4,12 @@ All notable changes to this project are documented here.
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and the project
 uses [Semantic Versioning](https://semver.org/).
 
+## [Unreleased]
+
 ## [1.0.0] - 2026-11-14
+
+First release, on the [App Store](https://apps.apple.com/app/id6446906500) and
+[Google Play](https://play.google.com/store/apps/details?id=app.studycycle).
 
 A complete rewrite in Flutter. The earlier Xamarin app (2023) is no longer maintained; its code is
 kept in the git history under the tag `xamarin-template-2023`.
@@ -24,3 +29,6 @@ kept in the git history under the tag `xamarin-template-2023`.
 - iPad and tablet layout: every screen is a centered column instead of stretching edge to edge.
 - The Study Cycle owl logo as the app icon (with an Android themed icon) and as the notification icon.
 - No data collection; no internet permission on Android.
+
+[Unreleased]: https://github.com/BitDevelopersLLC/StudyCycleApp/compare/v1.0.0...HEAD
+[1.0.0]: https://github.com/BitDevelopersLLC/StudyCycleApp/releases/tag/v1.0.0
