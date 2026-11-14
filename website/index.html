@@ -14,7 +14,7 @@
   <meta property="og:locale" content="en_US">
   <meta property="og:url" content="https://studycycle.app/">
   <meta property="og:title" content="Study Cycle: a free study timer">
-  <meta property="og:description" content="Focus on one task, then take a real break. 90-minute cycles by default, or 50, 25 or your own. Free, no ads, nothing collected. Coming soon to the App Store and Google Play.">
+  <meta property="og:description" content="Focus on one task, then take a real break. 90-minute cycles by default, or 50, 25 or your own. Free, no ads, nothing collected. On the App Store and Google Play.">
   <meta property="og:image" content="https://studycycle.app/assets/img/social-card.png?v=2">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
@@ -27,7 +27,7 @@
   <link rel="icon" href="assets/img/favicon.ico?v=2" sizes="any">
   <link rel="icon" href="assets/img/favicon-32.png?v=2" type="image/png" sizes="32x32">
   <link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png?v=2">
-  <link rel="stylesheet" href="assets/css/style.css?v=2">
+  <link rel="stylesheet" href="assets/css/style.css?v=3">
   <!-- Structured data for search engines. It is data, not code, so the strict CSP allows it.
        The FAQPage answers must match the questions in the #support section. Keep them in sync. -->
   <script type="application/ld+json">
@@ -60,7 +60,15 @@
       "name": "BitDevelopers LLC",
       "url": "https://bitdevelopers.com"
     },
-    "license": "https://www.gnu.org/licenses/gpl-3.0.html"
+    "license": "https://www.gnu.org/licenses/gpl-3.0.html",
+    "downloadUrl": [
+      "https://apps.apple.com/app/id6446906500",
+      "https://play.google.com/store/apps/details?id=app.studycycle"
+    ],
+    "sameAs": [
+      "https://apps.apple.com/app/id6446906500",
+      "https://play.google.com/store/apps/details?id=app.studycycle"
+    ]
   },
   {
     "@context": "https://schema.org",
@@ -140,7 +148,7 @@
         "name": "Where can I download it?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "Study Cycle is coming soon to the App Store and Google Play. Links will appear on this page when it's available."
+          "text": "Study Cycle is free on the App Store (https://apps.apple.com/app/id6446906500) and Google Play (https://play.google.com/store/apps/details?id=app.studycycle). You can also use it in your browser at https://studycycle.app/app/ with no download."
         }
       },
       {
@@ -195,12 +203,17 @@
             or set your own.
           </p>
           <div class="get-app">
-            <!-- When the app is live, replace these pills with the official
-                 "Download on the App Store" and "Get it on Google Play" badges,
-                 linked to the store listings. -->
-            <a class="web-pill" href="/app/">Use it in your browser</a>
-            <span class="soon-pill">Coming soon to the App Store</span>
-            <span class="soon-pill">Coming soon to Google Play</span>
+            <!-- Official store badges, used as supplied (Google's transparent margin trimmed,
+                 the artwork itself unchanged); only their height is set in the CSS. -->
+            <a class="store-badge" href="https://apps.apple.com/app/id6446906500">
+              <img src="assets/img/app-store-badge.svg?v=1" width="150" height="50"
+                   alt="Download on the App Store">
+            </a>
+            <a class="store-badge" href="https://play.google.com/store/apps/details?id=app.studycycle">
+              <img src="assets/img/google-play-badge.png?v=1" width="168" height="50"
+                   alt="Get it on Google Play">
+            </a>
+            <a class="web-pill" href="/app/">Or use it in your browser</a>
           </div>
           <p class="notify">
             Free. No ads, no account, nothing collected. Questions?
@@ -509,8 +522,9 @@
         <details>
           <summary>Where can I download it?</summary>
           <p>
-            Study Cycle is coming soon to the App Store and Google Play. Links will appear on this page
-            when it's available.
+            It's free on the <a href="https://apps.apple.com/app/id6446906500">App Store</a> for iPhone and iPad, and on
+            <a href="https://play.google.com/store/apps/details?id=app.studycycle">Google Play</a> for Android.
+            You can also <a href="/app/">use it in your browser</a> with no download.
           </p>
         </details>
 
@@ -531,6 +545,8 @@
       <span>&copy; 2023&ndash;2026 BitDevelopers LLC</span>
       <nav aria-label="Footer">
         <a href="#support">Support</a>
+        <a href="https://apps.apple.com/app/id6446906500">App Store</a>
+        <a href="https://play.google.com/store/apps/details?id=app.studycycle">Google Play</a>
         <a href="/app/">Web app</a>
         <a href="/privacy">Privacy policy</a>
         <a href="https://github.com/BitDevelopersLLC/StudyCycleApp">Source code</a>

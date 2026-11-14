@@ -9,6 +9,11 @@ minutes or choose your own lengths.
 - **Works offline.** The Android app doesn't even have internet access.
 - **Open source** (GPL-3.0), so anyone can check these promises.
 
+Get it:
+- iPhone and iPad: [App Store](https://apps.apple.com/app/id6446906500)
+- Android: [Google Play](https://play.google.com/store/apps/details?id=app.studycycle)
+- In a browser, no install: [studycycle.app/app](https://studycycle.app/app/)
+
 Website: [studycycle.app](https://studycycle.app)
 
 ## What it does

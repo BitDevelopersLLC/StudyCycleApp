@@ -202,12 +202,21 @@ h3 {
   background: var(--tint);
 }
 
-.soon-pill {
-  border: 1px solid rgba(255, 255, 255, 0.7);
-  border-radius: 999px;
-  padding: 6px 16px;
-  font-size: 15px;
-  font-weight: 500;
+/* Apple's and Google's badge artwork is used as supplied; only its height is set here. */
+.store-badge {
+  display: inline-block;
+  line-height: 0;
+}
+
+.store-badge img {
+  height: 50px;
+  width: auto;
+}
+
+.store-badge:focus-visible {
+  outline: 3px solid #fff;
+  outline-offset: 4px;
+  border-radius: 10px;
 }
 
 .hero .notify {
